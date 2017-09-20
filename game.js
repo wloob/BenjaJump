@@ -20,7 +20,7 @@ var down = false;
 var map;
 
 function preload() {
-    addLoadedImage("assets/texture/rock0.png")
+    addLoadedImage("assets/texture/rock/rock0.png")
 
     addLoadedImage("assets/player/stand0.png");
     addLoadedImage("assets/player/stand1.png");
