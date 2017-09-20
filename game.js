@@ -1,5 +1,9 @@
 var canvas;
 
+var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
+
+var useHost = true;
+
 var scl;
 var canvasWidth = 30;
 var canvasHeight = 15;
@@ -16,7 +20,7 @@ var down = false;
 var map;
 
 function preload() {
-    addLoadedImage("assets/texture/rocktile0.png")
+    addLoadedImage("assets/texture/rock0.png")
 
     addLoadedImage("assets/player/stand0.png");
     addLoadedImage("assets/player/stand1.png");
