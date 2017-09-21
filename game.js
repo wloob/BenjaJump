@@ -22,7 +22,7 @@ var down = false;
 var map;
 
 function preload() {
-    addLoadedMap("test-map2");
+    addLoadedMap("test-map3");
 
     addLoadedImage(backgroundPath + "hills.png");
 
@@ -57,7 +57,7 @@ function setup() {
     oldScl = scl;
 
     map = new Map();
-    map.initiate("test-map2");
+    map.initiate("test-map3");
 
     player = new Player(map.spawnX * scl, map.spawnY * scl);
 }
