@@ -6,8 +6,11 @@ function addLoadedMap(name) {
     }
 
     var file = loadJSON(mapPath + name + ".json");
-    if (file !== null)
+    if (file !== null) {
         loadedMaps.push(new LoadedMap(name, file));
+        return true;
+    }
+    return false;
 }
 
 function getLoadedMap(name) {
@@ -15,6 +18,7 @@ function getLoadedMap(name) {
         if (loadedMaps[i].name.toLowerCase() === name.toLowerCase())
             return loadedMaps[i].file;
     }
+
     return null;
 }
 
@@ -28,6 +32,7 @@ function Map() {
     this.file = null;
 
     this.tileColumns = {};
+    this.name = "Map Name";
     this.spawnX = 0;
     this.spawnY = 0;
     this.backgroundImage = null;
@@ -103,10 +108,15 @@ function Map() {
     this.initiate = function(mapName) {
         this.file = getLoadedMap(mapName);
         this.tileColumns = this.file.tiles;
+        while (this.tileColumns.length < canvasWidth) {
+            var empty = new Array(15);
+            empty.fill(0);
+            this.tileColumns.push(empty);
+        }
+        this.name = this.file.name;
         this.spawnX = this.file.spawnX;
         this.spawnY = this.file.spawnY;
-        this.backgroundImage = getLoadedImage(backgroundPath + this.file.background + ".png");
-        //[COL][ROW]
+        this.backgroundImage = getLoadedImage(backgroundPath + this.file.background);
     }
 }
 

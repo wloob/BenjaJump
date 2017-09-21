@@ -2,6 +2,7 @@ function Player(x, y) {
     Entity.call(this, x, y);
 
     this.initiate = function() {
+        this.heightOrigin = 1.6;
         this.width = 0.9;
         this.height = 1.6;
 
@@ -45,6 +46,13 @@ function Player(x, y) {
     this.initiate();
 
     this.playerTick = function() {
+        if (down && this.isOnGround() && this.velocity.x == 0) {
+            this.height = 1;
+            this.sprite.playAnimation("crouch");
+        }
+        else
+            this.height = this.heightOrigin;
+
         if (this.sprite.isFlipped())
             if (this.velocity.x > 0)
                 this.sprite.setFlipped(false);
@@ -53,7 +61,7 @@ function Player(x, y) {
             if (this.velocity.x < 0)
                 this.sprite.setFlipped(true);
 
-        if (this.isOnGround()) {
+        if (this.isOnGround() && this.sprite.currentAnimation().name != "crouch") {
             this.sprite.skipAnimation();
 
             if (this.velocity.x == 0)
