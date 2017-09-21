@@ -30,6 +30,7 @@ function Map() {
     this.tileColumns = {};
     this.spawnX = 0;
     this.spawnY = 0;
+    this.backgroundImage = null;
 
     this.xStart = 0;
 
@@ -38,6 +39,8 @@ function Map() {
     }
 
     this.draw = function() {
+        image(this.backgroundImage, 0, 0, width, height);
+
         for (c = Math.floor(this.xStart / scl); c < this.tileColumns.length; c++) {
             for (r = 0; r < this.tileColumns[c].length; r++) {
                 if (this.tileColumns[c][r] === 0)
@@ -102,6 +105,7 @@ function Map() {
         this.tileColumns = this.file.tiles;
         this.spawnX = this.file.spawnX;
         this.spawnY = this.file.spawnY;
+        this.backgroundImage = getLoadedImage(backgroundPath + this.file.background + ".png");
         //[COL][ROW]
     }
 }

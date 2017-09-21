@@ -2,6 +2,7 @@ var canvas;
 
 var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
 var mapPath  = "maps/";
+var backgroundPath = "assets/backgrounds/";
 
 var useHost = false;
 
@@ -22,6 +23,8 @@ var map;
 
 function preload() {
     addLoadedMap("test-map");
+
+    addLoadedImage(backgroundPath + "hills.png");
 
     addLoadedImage("assets/texture/tiles/1.png");
     addLoadedImage("assets/texture/tiles/2.png");
