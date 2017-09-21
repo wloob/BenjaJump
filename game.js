@@ -22,21 +22,21 @@ var map;
 function preload() {
     addLoadedImage("assets/texture/rock/rock0.png")
 
-    addLoadedImage("assets/player/stand0.png");
-    addLoadedImage("assets/player/stand1.png");
+    addLoadedImage("assets/player/default/stand0.png");
+    addLoadedImage("assets/player/default/stand1.png");
 
-    addLoadedImage("assets/player/run0.png");
-    addLoadedImage("assets/player/run1.png");
-    addLoadedImage("assets/player/run2.png");
-    addLoadedImage("assets/player/run3.png");
-    addLoadedImage("assets/player/run4.png");
+    addLoadedImage("assets/player/default/run0.png");
+    addLoadedImage("assets/player/default/run1.png");
+    addLoadedImage("assets/player/default/run2.png");
+    addLoadedImage("assets/player/default/run3.png");
+    addLoadedImage("assets/player/default/run4.png");
 
-    addLoadedImage("assets/player/air0.png");
+    addLoadedImage("assets/player/default/air0.png");
 
-    addLoadedImage("assets/player/jump0.png");
-    addLoadedImage("assets/player/jump1.png");
-    addLoadedImage("assets/player/jump2.png");
-    addLoadedImage("assets/player/jump3.png");
+    addLoadedImage("assets/player/default/jump0.png");
+    addLoadedImage("assets/player/default/jump1.png");
+    addLoadedImage("assets/player/default/jump2.png");
+    addLoadedImage("assets/player/default/jump3.png");
 
     scaleCanvas();
 }
