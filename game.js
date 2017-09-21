@@ -23,7 +23,9 @@ var map;
 function preload() {
     addLoadedMap("test-map");
 
-    addLoadedImage("assets/texture/tiles/1.png")
+    addLoadedImage("assets/texture/tiles/1.png");
+    addLoadedImage("assets/texture/tiles/2.png");
+    addLoadedImage("assets/texture/tiles/3.png");
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
