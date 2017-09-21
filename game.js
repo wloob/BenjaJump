@@ -3,7 +3,7 @@ var canvas;
 var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
 var mapPath  = "maps/";
 
-var useHost = true;
+var useHost = false;
 
 var scl;
 var canvasWidth = 30;
@@ -23,7 +23,7 @@ var map;
 function preload() {
     addLoadedMap("test-map");
 
-    addLoadedImage("assets/texture/rock/rock0.png")
+    addLoadedImage("assets/texture/tiles/1.png")
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");

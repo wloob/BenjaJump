@@ -107,7 +107,7 @@ function Map() {
 }
 
 function getTileImg(id) {
-    return getLoadedImage("assets/texture/rock/rock0.png");
+    return getLoadedImage("assets/texture/tiles/1.png");
 }
 
 function setTile(x, y, id) {
