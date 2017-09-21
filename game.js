@@ -1,6 +1,7 @@
 var canvas;
 
 var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
+var mapPath  = "maps/";
 
 var useHost = true;
 
@@ -20,6 +21,8 @@ var down = false;
 var map;
 
 function preload() {
+    addLoadedMap("test-map");
+
     addLoadedImage("assets/texture/rock/rock0.png")
 
     addLoadedImage("assets/player/default/stand0.png");
@@ -42,26 +45,15 @@ function preload() {
 }
 
 function setup() {
-    player = new Player(400, 50);
-
     canvas = createCanvas(canvasWidth * scl, canvasHeight * scl);
     canvas.parent('sketch-holder');
 
     oldScl = scl;
 
     map = new Map();
-    map.initiate("maps/map1");
-    map.setTile(4, 3, 1);
-    map.setTile(10, 6, 2);
-    map.setTile(17, 6, 1);
-    map.setTile(25, 10, 2);
-    map.setTile(2, 10, 1);
-    map.setTile(29, 3, 1);
-    map.setTile(35, 7, 2);
-    map.setTile(42, 5, 1);
-    map.setTile(45, 11, 1);
-    map.setTile(50, 8, 2);
-    map.setTile(58, 5, 2);
+    map.initiate("test-map");
+
+    player = new Player(map.spawnX * scl, map.spawnY * scl);
 }
 
 function draw() {

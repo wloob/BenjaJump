@@ -1,7 +1,37 @@
+var loadedMaps = new Array();
+
+function addLoadedMap(name) {
+    if (getLoadedImage(name) !== null) {
+        return;
+    }
+
+    var file = loadJSON(mapPath + name + ".json");
+    if (file !== null)
+        loadedMaps.push(new LoadedMap(name, file));
+}
+
+function getLoadedMap(name) {
+    for (i = 0; i < loadedMaps.length; i++) {
+        if (loadedMaps[i].name.toLowerCase() === name.toLowerCase())
+            return loadedMaps[i].file;
+    }
+    return null;
+}
+
+function LoadedMap(name, file) {
+    this.name = name;
+    this.file = file;
+}
+
+
 function Map() {
-    this.xStart = 0;
+    this.file = null;
 
     this.tileColumns = {};
+    this.spawnX = 0;
+    this.spawnY = 0;
+
+    this.xStart = 0;
 
     this.setTile = function(x, y, id) {
         this.tileColumns[x][y] = id;
@@ -67,12 +97,11 @@ function Map() {
             return true;
     }
 
-    this.initiate = function(folderName) {
-        this.tileColumns = new Array(canvasWidth * 2);
-        for (i = 0; i < this.tileColumns.length; i++) {
-            this.tileColumns[i] = new Array(canvasHeight).fill(0);
-        }
-
+    this.initiate = function(mapName) {
+        this.file = getLoadedMap(mapName);
+        this.tileColumns = this.file.tiles;
+        this.spawnX = this.file.spawnX;
+        this.spawnY = this.file.spawnY;
         //[COL][ROW]
     }
 }

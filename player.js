@@ -16,27 +16,27 @@ function Player(x, y) {
         this.controlCamera = true;
 
         var standAni = new Animation("stand");
-        standAni.addFrame(getLoadedImage("assets/player/stand0.png"), 7);
-        standAni.addFrame(getLoadedImage("assets/player/stand1.png"), 13);
+        standAni.addFrame(getLoadedImage("assets/player/default/stand0.png"), 7);
+        standAni.addFrame(getLoadedImage("assets/player/default/stand1.png"), 13);
         this.sprite.addAnimation(standAni);
 
         var runAni = new Animation("run");
-        runAni.addFrame(getLoadedImage("assets/player/run0.png"), 4);
-        runAni.addFrame(getLoadedImage("assets/player/run1.png"), 4);
-        runAni.addFrame(getLoadedImage("assets/player/run2.png"), 4);
-        runAni.addFrame(getLoadedImage("assets/player/run3.png"), 4);
-        runAni.addFrame(getLoadedImage("assets/player/run4.png"), 4);
+        runAni.addFrame(getLoadedImage("assets/player/default/run0.png"), 4);
+        runAni.addFrame(getLoadedImage("assets/player/default/run1.png"), 4);
+        runAni.addFrame(getLoadedImage("assets/player/default/run2.png"), 4);
+        runAni.addFrame(getLoadedImage("assets/player/default/run3.png"), 4);
+        runAni.addFrame(getLoadedImage("assets/player/default/run4.png"), 4);
         this.sprite.addAnimation(runAni);
 
         var jumpAni = new Animation("jump");
-        jumpAni.addFrame(getLoadedImage("assets/player/jump0.png"), 7);
-        jumpAni.addFrame(getLoadedImage("assets/player/jump1.png"), 7);
-        jumpAni.addFrame(getLoadedImage("assets/player/jump2.png"), 7);
-        jumpAni.addFrame(getLoadedImage("assets/player/jump3.png"), 12);
+        jumpAni.addFrame(getLoadedImage("assets/player/default/jump0.png"), 7);
+        jumpAni.addFrame(getLoadedImage("assets/player/default/jump1.png"), 7);
+        jumpAni.addFrame(getLoadedImage("assets/player/default/jump2.png"), 7);
+        jumpAni.addFrame(getLoadedImage("assets/player/default/jump3.png"), 12);
         this.sprite.addAnimation(jumpAni);
 
         var airAni = new Animation("air");
-        airAni.addFrame(getLoadedImage("assets/player/air0.png"), 10);
+        airAni.addFrame(getLoadedImage("assets/player/default/air0.png"), 10);
         this.sprite.addAnimation(airAni);
 
         this.sprite.setFlipped(true);
