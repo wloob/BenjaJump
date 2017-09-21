@@ -46,7 +46,7 @@ function Map() {
                 if (this.tileColumns[c][r] === 0)
                     continue;
 
-                image(getTileImg(this.tileColumns[c][r]), c * scl - this.xStart, height - r * scl - scl, scl, scl);
+                image(getTileImg(Math.abs(this.tileColumns[c][r])), c * scl - this.xStart, height - r * scl - scl, scl, scl);
             }
         }
     }
@@ -85,9 +85,9 @@ function Map() {
         }
 
         if (Math.floor(x + this.xStart) / scl >= this.tileColumns.length) { //For tæt på slutvæggen
-            return this.tileColumns[Math.floor((x + this.xStart - 10) / scl)][Math.floor(y / scl)] != 0;
+            return this.tileColumns[Math.floor((x + this.xStart - 10) / scl)][Math.floor(y / scl)] > 0;
         } else
-            return this.tileColumns[Math.floor((x + this.xStart) / scl)][Math.floor(y / scl)] != 0;
+            return this.tileColumns[Math.floor((x + this.xStart) / scl)][Math.floor(y / scl)] > 0;
     }
 
     this.collisionRect = function(x, y, width, height) {
