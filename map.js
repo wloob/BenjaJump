@@ -42,6 +42,11 @@ function Map() {
     this.leftBorder = true;
     this.rightBorder = true;
 
+    this.linkAbove = null;
+    this.linkBelow = null;
+    this.linkLeft = null;
+    this.linkRight = null;
+
     this.xStart = 0;
 
     this.setTile = function(x, y, id) {
@@ -119,13 +124,32 @@ function Map() {
             this.tileColumns.push(empty);
         }
         this.name = this.file.name;
+
         this.spawnX = this.file.spawnX;
         this.spawnY = this.file.spawnY;
+
         this.backgroundImage = getLoadedImage(backgroundPath + this.file.background);
-        this.topBorder = this.file.topBorder;
-        this.buttomBorder = this.file.buttomBorder;
-        this.leftBorder = this.file.leftBorder;
-        this.rightBorder = this.file.rightBorder;
+
+        if (this.file.topBorder != null)
+            this.topBorder = this.file.topBorder;
+        if (this.file.buttomBorder != null)
+            this.buttomBorder = this.file.buttomBorder;
+        if (this.file.leftBorder != null)
+            this.leftBorder = this.file.leftBorder;
+        if (this.file.rightBorder != null)
+            this.rightBorder = this.file.rightBorder;
+
+        this.linkAbove = this.file.linkAbove;
+        this.linkBelow = this.file.linkBelow;
+        this.linkLeft = this.file.linkLeft;
+        this.linkRight = this.file.linkRight;
+
+        this.xStart = 0;
+
+        player.x = this.spawnX * scl;
+        player.y = this.spawnY * scl + 1;
+        player.velocity.x = 0;
+        player.velocity.y = 0;
     }
 }
 

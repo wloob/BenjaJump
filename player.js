@@ -1,5 +1,5 @@
-function Player(x, y) {
-    Entity.call(this, x, y);
+function Player() {
+    Entity.call(this, 0, 0);
 
     this.initiate = function() {
         this.heightOrigin = 1.6;
@@ -8,7 +8,7 @@ function Player(x, y) {
 
         this.runSpeed = 4;
         this.gravity = 4;
-        this.jumpPower = 4; //4.5
+        this.jumpPower = 4.1; //4.5
 
         this.xDecrease = scl / 30;
         this.xDecreaseGround = scl / 15;
@@ -46,12 +46,15 @@ function Player(x, y) {
     this.initiate();
 
     this.playerTick = function() {
-        if (down && this.isOnGround()) {
+        /*
+        if (down && this.isOnGround() && this.velocity.x == 0) {
             this.height = 1;
             this.sprite.playAnimation("crouch");
         }
+
         else
             this.height = this.heightOrigin;
+        */
 
         if (this.sprite.isFlipped())
             if (this.velocity.x > 0)

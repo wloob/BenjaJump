@@ -19,7 +19,7 @@ function Entity(x, y) {
 
     this.controlCamera;
 
-    this.initiate = function(){
+    this.initiate = function() {
         //Setting child entity values
         //console.log("parent init");
     }
@@ -132,11 +132,43 @@ function Entity(x, y) {
             this.x += this.velocity.x;
         this.y += this.velocity.y;
 
-        this.x = constrain(this.x, (map.leftBorder ? 0 : Number.MIN_VALUE), (map.rightBorder ? map.width() * scl - this.width * scl : Number.MAX_VALUE));
-        this.y = constrain(this.y, (map.buttomBorder ? 0 : Number.MIN_VALUE), (map.topBorder ? map.height() * scl - this.height * scl : Number.MAX_VALUE));
+        /*
+        var minX = 0;
+        if (map.leftBorder)
+            minX = Number.MIN_VALUE;
+
+        var maxX = map.width() * scl - this.width * scl;
+        if (map.rightBorder)
+            minX = Number.MAX_VALUE;
+        */
+
+        var minY = 0;
+        if (map.buttomBorder)
+            minY = Number.MIN_VALUE;
+
+        var maxY = map.height() * scl - this.height * scl;
+        if (map.topBorder)
+            maxY = Number.MAX_VALUE;
+
+        this.x = constrain(this.x, 0, map.width() * scl - this.width * scl);
+        if (this.y >= 0)
+        this.y = constrain(this.y, minY, maxY);
+
+
+        if (map.linkAbove != null && this.y > map.height() * scl - this.height * scl)
+            map.initiate(map.linkAbove);
+
+        else if (map.linkBelow != null && this.y < 0)
+            map.initiate(map.linkBelow);
+
+        else if (map.linkLeft != null && this.x < 0)
+            map.initiate(map.linkLeft);
+
+        else if (map.linkRight != null && this.x > map.width() * scl - this.width * scl)
+            map.initiate(map.linkRight);
     }
 
-    this.isOnGround = function() {        
+    this.isOnGround = function() {
         if (this.y <= 0 && map.buttomBorder)
             return true;
 

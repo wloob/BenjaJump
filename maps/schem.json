@@ -13,5 +13,9 @@
 	"topBorder": "true",
 	"buttomBorder": "true",
 	"leftBorder": "true",
-	"rightBorder": "true"
+	"rightBorder": "true",
+	"linkAbove": "test-map",
+	"linkBelow": "test-map",
+	"linkLeft": "test-map",
+	"linkRight": "test-map"
 }
