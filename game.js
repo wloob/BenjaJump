@@ -59,7 +59,7 @@ function setup() {
     map = new Map();
     map.initiate("test-map3");
 
-    player = new Player(map.spawnX * scl, map.spawnY * scl);
+    player = new Player(map.spawnX * scl + 1, map.spawnY * scl + 1);
 }
 
 function draw() {

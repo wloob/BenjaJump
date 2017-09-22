@@ -46,7 +46,7 @@ function Player(x, y) {
     this.initiate();
 
     this.playerTick = function() {
-        if (down && this.isOnGround() && this.velocity.x == 0) {
+        if (down && this.isOnGround()) {
             this.height = 1;
             this.sprite.playAnimation("crouch");
         }

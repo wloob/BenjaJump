@@ -132,12 +132,12 @@ function Entity(x, y) {
             this.x += this.velocity.x;
         this.y += this.velocity.y;
 
-        this.x = constrain(this.x, 0, map.width() * scl - this.width * scl);
-        this.y = constrain(this.y, 0, map.height() * scl - this.height * scl);
+        this.x = constrain(this.x, (map.leftBorder ? 0 : Number.MIN_VALUE), (map.rightBorder ? map.width() * scl - this.width * scl : Number.MAX_VALUE));
+        this.y = constrain(this.y, (map.buttomBorder ? 0 : Number.MIN_VALUE), (map.topBorder ? map.height() * scl - this.height * scl : Number.MAX_VALUE));
     }
 
-    this.isOnGround = function() {
-        if (this.y <= 0)
+    this.isOnGround = function() {        
+        if (this.y <= 0 && map.buttomBorder)
             return true;
 
         else if (map.collision(this.x, this.y - 1) || map.collision(this.x + this.width * scl - 1, this.y - 1) || map.collision(this.x + this.width / 2 * scl - 1, this.y - 1))
@@ -147,8 +147,9 @@ function Entity(x, y) {
     }
 
     this.isOnCeiling = function() {
+        if (map.topBorder)
+            return this.y + this.height * scl >= canvasHeight * scl;
         return false;
-        //return this.y + this.height * scl >= canvasHeight * scl;
     }
 
     this.isOnLeftWall = function() {

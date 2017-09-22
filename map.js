@@ -37,6 +37,11 @@ function Map() {
     this.spawnY = 0;
     this.backgroundImage = null;
 
+    this.topBorder = true;
+    this.buttomBorder = true;
+    this.leftBorder = true;
+    this.rightBorder = true;
+
     this.xStart = 0;
 
     this.setTile = function(x, y, id) {
@@ -117,6 +122,10 @@ function Map() {
         this.spawnX = this.file.spawnX;
         this.spawnY = this.file.spawnY;
         this.backgroundImage = getLoadedImage(backgroundPath + this.file.background);
+        this.topBorder = this.file.topBorder;
+        this.buttomBorder = this.file.buttomBorder;
+        this.leftBorder = this.file.leftBorder;
+        this.rightBorder = this.file.rightBorder;
     }
 }
 
