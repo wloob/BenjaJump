@@ -155,17 +155,39 @@ function Entity(x, y) {
         this.y = constrain(this.y, minY, maxY);
 
 
-        if (map.linkAbove != null && this.y > map.height() * scl - this.height * scl)
-            map.initiate(map.linkAbove);
+        console.log("x=" + this.x + ", xStart=" + map.xStart + "  = " + (this.x + map.xStart) / scl);
 
-        else if (map.linkBelow != null && this.y < 0)
-            map.initiate(map.linkBelow);
+        if (this.y > map.height() * scl - this.height * scl && map.getLink("up", (this.x + map.xStart) / scl) != null) {
+            var link = map.getLink("up", (this.x + map.xStart) / scl);
 
-        else if (map.linkLeft != null && this.x < 0)
-            map.initiate(map.linkLeft);
+            map.initiate(link.name);
+            this.x = link.x * scl;
+            this.y = link.y * scl + 1;
+        }
 
-        else if (map.linkRight != null && this.x > map.width() * scl - this.width * scl)
-            map.initiate(map.linkRight);
+        else if (this.y < 0 && map.getLink("down", (this.x + map.xStart) / scl) != null) {
+            var link = map.getLink("down", (this.x + map.xStart) / scl);
+
+            map.initiate(link.name);
+            this.x = link.x * scl;
+            this.y = link.y * scl + 1;
+        }
+
+        else if (this.x < 0 && map.getLink("left", this.y / scl) != null) {
+            var link = map.getLink("left", this.x / scl);
+
+            map.initiate(link.name);
+            this.x = link.x * scl;
+            this.y = link.y * scl + 1;
+        }
+
+        else if (this.x > map.width() * scl - this.width * scl && map.getLink("right", this.y / scl) != null) {
+            var link = map.getLink("right", this.y / scl);
+
+            map.initiate(link.name);
+            this.x = link.x * scl;
+            this.y = link.y * scl + 1;
+        }
     }
 
     this.isOnGround = function() {

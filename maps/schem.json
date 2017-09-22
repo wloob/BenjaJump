@@ -14,8 +14,12 @@
 	"buttomBorder": "true",
 	"leftBorder": "true",
 	"rightBorder": "true",
-	"linkAbove": "test-map",
-	"linkBelow": "test-map",
-	"linkLeft": "test-map",
-	"linkRight": "test-map"
+	
+	"links": [
+		{
+			"type": "down",
+			"min": 0,
+			"max": 1000000
+		}
+	]
 }

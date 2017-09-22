@@ -42,10 +42,7 @@ function Map() {
     this.leftBorder = true;
     this.rightBorder = true;
 
-    this.linkAbove = null;
-    this.linkBelow = null;
-    this.linkLeft = null;
-    this.linkRight = null;
+    this.links = new Array();
 
     this.xStart = 0;
 
@@ -115,6 +112,15 @@ function Map() {
             return true;
     }
 
+    this.getLink = function(type, val) {
+        for (i = 0; i < this.links.length; i++) {
+            if (this.links[i].type.toLowerCase() === type.toLowerCase() && val >= this.links[i].min && val <= this.links[i].max)
+                return this.links[i].target;
+        }
+
+        return null;
+    }
+
     this.initiate = function(mapName) {
         this.file = getLoadedMap(mapName);
         this.tileColumns = this.file.tiles;
@@ -139,17 +145,16 @@ function Map() {
         if (this.file.rightBorder != null)
             this.rightBorder = this.file.rightBorder;
 
-        this.linkAbove = this.file.linkAbove;
-        this.linkBelow = this.file.linkBelow;
-        this.linkLeft = this.file.linkLeft;
-        this.linkRight = this.file.linkRight;
+        this.links = this.file.links;
+        if (this.links != null)
+            for (i = 0; i < this.links.length; i++) {
+                console.log("min=" + this.links[i].min + ", max=" + this.links[i].max);
+            }
 
         this.xStart = 0;
 
         player.x = this.spawnX * scl;
         player.y = this.spawnY * scl + 1;
-        player.velocity.x = 0;
-        player.velocity.y = 0;
     }
 }
 
