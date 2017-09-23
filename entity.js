@@ -78,11 +78,12 @@ function Entity(x, y) {
                 this.velocity.y -= (this.yDecrease / 2.5 * this.gravity) * 0.55;
             else
                 this.velocity.y -= this.yDecrease / 2.5 * this.gravity;
-        } else
+        } else {
             this.velocity.y = 0;
+        }
 
 
-        if (!this.isOnGround() && (this.isOnLeftWall() || this.isOnRightWall()) && this.distanceToGround() > 1.5) {
+        if (!this.isOnGround() && (this.isOnLeftWall() || this.isOnRightWall()) && this.distanceToGround() > 0.5) {
             if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
                 this.velocity.y = -3;
                 this.sprite.playAnimation("wall");
@@ -161,10 +162,13 @@ function Entity(x, y) {
         else if (this.velocity.x < 0 && this.x - map.xStart < width / 3)
             map.moveStart(this.velocity.x, 0);
 
-        if (this.velocity.y > 0 && this.y - map.yStart > height / 2)
+
+        map.setStartY((this.y + this.height / 2) - height / 2);
+
+        /*if (this.velocity.y > 0 && this.y + this.height * scl - map.yStart > height / 2)
             map.moveStart(0, this.velocity.y);
-        else if (this.velocity.y < 0 && this.y - map.yStart < height / 2)
-            map.moveStart(0, this.velocity.y);
+        else if (this.velocity.y < 0 && this.y + this.height * scl - map.yStart < height / 2)
+            map.moveStart(0, this.velocity.y);*/
     }
 
     this.updatePosition = function() {
@@ -299,6 +303,6 @@ function Entity(x, y) {
     }
 
     this.show = function() {
-        this.sprite.show(this.x - map.xStart, this.y - map.yStart, this.width * scl, this.height * scl);
+        this.sprite.show(Math.floor(this.x - map.xStart), Math.floor(this.y - map.yStart), this.width * scl, this.height * scl);
     }
 }

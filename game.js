@@ -1,15 +1,16 @@
 var canvas;
 
+var noUpdateTicks = 0;
+
+var useHost = false;
 var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
 var mapPath  = "maps/";
 var backgroundPath = "assets/backgrounds/";
 
-var useHost = false;
-
 var scl;
 var canvasWidth = 30;
 var canvasHeight = 15;
-var borderHeight = 50;
+var borderHeight = 30;
 
 var oldScl;
 
@@ -71,7 +72,10 @@ function setup() {
 }
 
 function draw() {
-    tick();
+    if (noUpdateTicks > 0) {
+        noUpdateTicks--;
+    } else
+        tick();
 
     background(41, 234, 244);
 
@@ -127,11 +131,13 @@ function windowResized() {
     player.scale();
 
     oldScl = scl;
+
+    noUpdateTicks = 10;
 }
 
 function scaleCanvas() {
     scl = 1;
-	while (windowWidth > scl * canvasWidth && windowHeight > scl * canvasHeight + borderHeight) {
+	while (windowWidth > canvasWidth * (scl + 1) && windowHeight > canvasHeight * (scl + 1) + borderHeight) {
 		scl++;
 	}
     if (canvas != null)

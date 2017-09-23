@@ -102,6 +102,14 @@ function Map() {
             this.yStart+=addedY;
     }
 
+    this.setStartY = function(y) {
+        this.yStart = y;
+        if (this.yStart < 0)
+            this.yStart = 0;
+        else if (this.yStart > this.height() - height)
+            this.yStart = this.height() - height;
+    }
+
     this.collision = function(x, y) {
         if (x < 0 || y < 0)
             return false;

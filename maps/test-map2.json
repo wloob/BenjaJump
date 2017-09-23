@@ -51,7 +51,7 @@
 		{
 			"target": {
 				"name": "test-map3",
-				"x": 40,
+				"x": 40.5,
 				"y": 0
 			},
 			"type": "up",

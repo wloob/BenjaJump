@@ -110,7 +110,7 @@ function Player() {
             this.jumpHeld = true;
 
             this.sprite.playAnimation("jump");
-        } else if (this.isOnLeftWall() && this.distanceToGround() > 1.5 && this.velocity.y < 0 && this.lastWallJump != 1 && !this.jumpHeld) {
+        } else if (this.isOnLeftWall() && this.distanceToGround() > 0.5 && this.velocity.y < 0 && this.lastWallJump != 1 && !this.jumpHeld) {
             this.y++;
             this.x++;
             this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
@@ -120,7 +120,7 @@ function Player() {
             this.lastWallJump = 1;
             this.noControlTicks = 10;
 
-        } else if (this.isOnRightWall() && this.distanceToGround() > 1.5 && this.velocity.y < 0 && this.lastWallJump != 2 && !this.jumpHeld) {
+        } else if (this.isOnRightWall() && this.distanceToGround() > 0.5 && this.velocity.y < 0 && this.lastWallJump != 2 && !this.jumpHeld) {
             this.y++;
             this.x--;
             this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
