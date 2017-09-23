@@ -72,7 +72,7 @@
 			"target": {
 				"name": "test-map2",
 				"x": 5,
-				"y": 12
+				"y": 14
 			},
 			"type": "down",
 			"min": 21,
@@ -82,7 +82,7 @@
 			"target": {
 				"name": "test-map2",
 				"x": 16,
-				"y": 13
+				"y": 14
 			},
 			"type": "down",
 			"min": 39,
@@ -91,7 +91,7 @@
 		{
 			"target": {
 				"name": "test-map",
-				"x": 2,
+				"x": 0,
 				"y": 4
 			},
 			"type": "right",

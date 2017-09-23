@@ -41,8 +41,8 @@
 		{
 			"target": {
 				"name": "test-map3",
-				"x": 26,
-				"y": 1
+				"x": 24,
+				"y": 0
 			},
 			"type": "up",
 			"min": 0,
@@ -51,8 +51,8 @@
 		{
 			"target": {
 				"name": "test-map3",
-				"x": 38,
-				"y": 1
+				"x": 40,
+				"y": 0
 			},
 			"type": "up",
 			"min": 15,

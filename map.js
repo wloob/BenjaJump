@@ -170,10 +170,6 @@ function Map() {
             if (this.xStart > (this.width() - canvasWidth * scl))
                 this.xStart = (this.width() - canvasWidth * scl);
         }
-
-        player.velocity.x = 0;
-        player.velocity.y = 0;
-        player.sprite.skipAnimation();
     }
 }
 
