@@ -61,7 +61,7 @@ function Player() {
         if (this.isOnGround())
             this.lastWallJump = 0;
 
-        if (!up)
+        if (!up && (this.isOnLeftWall() || this.isOnRightWall()))
             this.jumpHeld = false;
 
         if (this.sprite.isFlipped())
