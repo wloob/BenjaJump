@@ -50,6 +50,7 @@ function Map() {
     this.links = new Array();
 
     this.xStart = 0;
+    this.yStart = 0;
 
     this.setTile = function(x, y, id) {
         this.tileColumns[x][y] = id;
@@ -59,17 +60,22 @@ function Map() {
         image(this.backgroundImage, 0, 0, width, height);
 
         for (c = Math.floor(this.xStart / scl); c < this.tileColumns.length; c++) {
-            for (r = 0; r < this.tileColumns[c].length; r++) {
+            for (r = Math.floor(this.yStart / scl); r < this.tileColumns[c].length; r++) {
                 if (this.tileColumns[c][r] === 0)
                     continue;
 
-                image(getTileImg(Math.abs(this.tileColumns[c][r])), c * scl - Math.floor(this.xStart), height - r * scl - scl, scl, scl);
+                if (getTileImg(Math.abs(this.tileColumns[c][r])) == null) {
+                    continue;
+                }
+
+                image(getTileImg(Math.abs(this.tileColumns[c][r])), c * scl - Math.floor(this.xStart), height - r * scl - scl + Math.floor(this.yStart), scl, scl);
             }
         }
     }
 
     this.scale = function() {
         this.xStart = scl / oldScl * this.xStart;
+        this.yStart = scl / oldScl * this.yStart;
     }
 
     this.width = function() {
@@ -80,19 +86,25 @@ function Map() {
         return this.tileColumns[0].length * scl;
     }
 
-    this.moveStart = function(added) {
-        if (added < 0 && this.xStart + added >= 0)
-            this.xStart+=added;
+    this.moveStart = function(addedX, addedY) {
+        if (addedX < 0 && this.xStart + addedX >= 0)
+            this.xStart+=addedX;
+        else if (addedX > 0 && this.xStart + addedX < (this.tileColumns.length - canvasWidth) * scl) // total mulig - aktuel
+            this.xStart+=addedX;
 
-        else if (added > 0 && this.xStart + added < (this.tileColumns.length - canvasWidth) * scl) // total mulig - aktuel
-            this.xStart+=added;
+        //console.log("startX index = " + Math.floor(this.xStart));
+
+        if (addedY < 0 && this.yStart + addedY >= 0)
+            this.yStart+=addedY;
+        else if (addedY > 0 && this.yStart + addedY < (this.tileColumns[Math.floor(this.xStart / scl)].length - canvasHeight) * scl) // total mulig - aktuel
+            this.yStart+=addedY;
     }
 
     this.collision = function(x, y) {
         if (x < 0 || y < 0)
             return false;
 
-        if (Math.floor((x - this.xStart) / scl) > this.tileColumns.length || Math.floor(y / scl) > this.tileColumns.length)
+        if (Math.floor((x - this.xStart) / scl) > this.tileColumns.length || Math.floor((y - this.yStart) / scl) > this.tileColumns.length)
             return false;
 
         return this.getBlockAt(x, y).id > 0;
@@ -170,6 +182,8 @@ function Map() {
             if (this.xStart > (this.width() - canvasWidth * scl))
                 this.xStart = (this.width() - canvasWidth * scl);
         }
+
+        this.yStart = 0;
     }
 }
 

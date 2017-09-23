@@ -67,6 +67,10 @@ function Entity(x, y) {
                 this.velocity.y -= this.yDecrease / 2.5 * this.gravity;
         }
 
+        if (this.velocity.y < -25)
+            this.velocity.y = -25;
+
+
         if (this.isOnCeiling()) {
             this.y--;
             this.velocity.y = 0;
@@ -131,10 +135,17 @@ function Entity(x, y) {
             }
         }
 
-        if (this.controlCamera && this.velocity.x > 0 && this.x > width / 3 * 2)
-            map.moveStart(this.velocity.x);
-        else if (this.controlCamera && this.velocity.x < 0 && this.x - map.xStart < width / 3)
-            map.moveStart(this.velocity.x);
+        if (this.controlCamera) {
+            if (this.velocity.x > 0 && this.x > width / 3 * 2)
+                map.moveStart(this.velocity.x, 0);
+            else if (this.velocity.x < 0 && this.x - map.xStart < width / 3)
+                map.moveStart(this.velocity.x, 0);
+
+            if (this.velocity.y > 0 && this.y - map.yStart > height / 2)
+                map.moveStart(0, this.velocity.y);
+            else if (this.velocity.y < 0 && this.y - map.yStart < height / 2)
+                map.moveStart(0, this.velocity.y);
+        }
 
         this.x += this.velocity.x;
         this.y += this.velocity.y;
@@ -228,6 +239,6 @@ function Entity(x, y) {
     }
 
     this.show = function() {
-        this.sprite.show(this.x - map.xStart, this.y, this.width * scl, this.height * scl);
+        this.sprite.show(this.x - map.xStart, this.y - map.yStart, this.width * scl, this.height * scl);
     }
 }
