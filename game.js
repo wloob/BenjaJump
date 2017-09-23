@@ -23,6 +23,7 @@ var map;
 
 function preload() {
     addLoadedMap("test5");
+    addLoadedMap("test-map");
     addLoadedMap("test-map2");
     addLoadedMap("test-map3");
 
@@ -31,7 +32,7 @@ function preload() {
     addLoadedImage("assets/texture/tiles/1.png");
     addLoadedImage("assets/texture/tiles/2.png");
     addLoadedImage("assets/texture/tiles/3.png");
-    addLoadedImage("assets/texture/tiles/11.png");
+    addLoadedImage("assets/texture/tiles/18.png");
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
@@ -62,6 +63,9 @@ function setup() {
 
     map = new Map();
     map.initiate("test-map3");
+
+    player.x = map.spawnX * scl;
+    player.y = map.spawnY * scl + 1;
 }
 
 function draw() {
@@ -71,13 +75,14 @@ function draw() {
 
     map.draw();
 
-    player.playerTick();
     player.show();
 }
 
 function tick() {
     move();
+
     player.tick();
+    player.playerTick();
 }
 
 function move() {

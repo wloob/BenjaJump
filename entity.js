@@ -32,6 +32,7 @@ function Entity(x, y) {
 
         this.sprite.tick();
 
+
         movecheck: if (this.velocity.x > 0) {
             if (this.isOnRightWall()) {
                 this.velocity.x = 0;
@@ -54,6 +55,7 @@ function Entity(x, y) {
             this.velocity.x = constrain(this.velocity.x, Number.NEGATIVE_INFINITY, 0);
         }
 
+
         if (this.isOnGround()) {
             this.velocity.y = 0;
         } else {
@@ -72,8 +74,11 @@ function Entity(x, y) {
 
         //COLLISION CHECK
         while (map.collisionRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
+            //console.log("collision at (" + this.x + ";" + this.y + ") + (" + this.velocity.x + ";" + this.velocity.y + ") at scale: " + scl);
+
             //VERTICALLY
             while (map.collisionRect(this.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
+                //console.log("collision at velY: " + this.velocity.y);
                 if (this.velocity.y > 0) {
                     this.velocity.y--;
                     if (this.velocity.y < 0)
@@ -88,6 +93,7 @@ function Entity(x, y) {
 
             //HORIZONTAL
             while (map.collisionRect(this.x + this.velocity.x, this.y, this.width * scl, this.height * scl)) {
+                //console.log("collision at velX: " + this.velocity.x);
                 if (this.velocity.x > 0) {
                     this.velocity.x--;
                     if (this.velocity.x < 0)
@@ -102,6 +108,8 @@ function Entity(x, y) {
 
             //STRAIGHT
             while (map.collisionRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
+                //console.log("collision at velX: " + this.velocity.x + ", velY=" + this.velocity.y);
+
                 if (this.velocity.x > 0) {
                     this.velocity.x--;
                     if (this.velocity.x < 0)
@@ -123,75 +131,72 @@ function Entity(x, y) {
             }
         }
 
-        if (this.controlCamera && this.velocity.x < 0 && this.x < width / 3) {
-            this.x += this.velocity.x - map.moveStart(this.velocity.x);
-        } else if (this.controlCamera && this.velocity.x > 0 && this.x > width / 3 * 2) {
-            this.x += this.velocity.x - map.moveStart(this.velocity.x);
-        }
-        else
-            this.x += this.velocity.x;
+        if (this.controlCamera && this.velocity.x > 0 && this.x > width / 3 * 2)
+            map.moveStart(this.velocity.x);
+        else if (this.controlCamera && this.velocity.x < 0 && this.x - map.xStart < width / 3)
+            map.moveStart(this.velocity.x);
+
+        this.x += this.velocity.x;
         this.y += this.velocity.y;
 
-        /*
-        var minX = 0;
-        if (map.leftBorder)
-            minX = Number.MIN_VALUE;
 
-        var maxX = map.width() * scl - this.width * scl;
-        if (map.rightBorder)
-            minX = Number.MAX_VALUE;
-        */
+        var minX = 0;
+        if (map.leftBorder != true)
+            minX = -Number.MAX_VALUE;
+
+        var maxX = map.width() - this.width * scl;
+        if (map.rightBorder != true)
+            maxX = Number.MAX_VALUE;
 
         var minY = 0;
-        if (map.buttomBorder)
-            minY = Number.MIN_VALUE;
+        if (map.buttomBorder != true)
+            minY = -Number.MAX_VALUE;
 
-        var maxY = map.height() * scl - this.height * scl;
-        if (map.topBorder)
+        var maxY = map.height() - this.height * scl;
+        if (map.topBorder != true)
             maxY = Number.MAX_VALUE;
 
-        this.x = constrain(this.x, 0, map.width() * scl - this.width * scl);
-        if (this.y >= 0)
+
+        this.x = constrain(this.x, minX, maxX);   //RETURNEREDE MIN VÆRDI NÅR NEGATIV
         this.y = constrain(this.y, minY, maxY);
 
 
-        console.log("x=" + this.x + ", xStart=" + map.xStart + "  = " + (this.x + map.xStart) / scl);
+        //LINK CHECK
+        if (this.y - this.height * scl > map.height() - this.height * scl && map.getLink("up", this.x / scl) != null) {
+            var link = map.getLink("up", this.x / scl);
 
-        if (this.y > map.height() * scl - this.height * scl && map.getLink("up", (this.x + map.xStart) / scl) != null) {
-            var link = map.getLink("up", (this.x + map.xStart) / scl);
-
-            map.initiate(link.name);
             this.x = link.x * scl;
             this.y = link.y * scl + 1;
+            map.initiate(link.name);
         }
 
-        else if (this.y < 0 && map.getLink("down", (this.x + map.xStart) / scl) != null) {
-            var link = map.getLink("down", (this.x + map.xStart) / scl);
+        else if (this.y + this.height * scl < 0 && map.getLink("down", this.x / scl) != null) {
+            var link = map.getLink("down", this.x / scl);
 
-            map.initiate(link.name);
             this.x = link.x * scl;
             this.y = link.y * scl + 1;
+            map.initiate(link.name);
         }
 
-        else if (this.x < 0 && map.getLink("left", this.y / scl) != null) {
-            var link = map.getLink("left", this.x / scl);
+        else if (this.x + this.width * scl < 0 && map.getLink("left", this.y / scl) != null) {
+            var link = map.getLink("left", this.y / scl);
 
-            map.initiate(link.name);
             this.x = link.x * scl;
             this.y = link.y * scl + 1;
+            map.initiate(link.name);
         }
 
-        else if (this.x > map.width() * scl - this.width * scl && map.getLink("right", this.y / scl) != null) {
+        else if (this.x - this.width * scl > map.width() - this.width * scl && map.getLink("right", this.y / scl) != null) {
             var link = map.getLink("right", this.y / scl);
 
-            map.initiate(link.name);
             this.x = link.x * scl;
             this.y = link.y * scl + 1;
+            map.initiate(link.name);
         }
     }
 
     this.isOnGround = function() {
-        if (this.y <= 0 && map.buttomBorder)
+        if (map.buttomBorder == true && this.y <= 0)
             return true;
 
         else if (map.collision(this.x, this.y - 1) || map.collision(this.x + this.width * scl - 1, this.y - 1) || map.collision(this.x + this.width / 2 * scl - 1, this.y - 1))
@@ -201,17 +206,15 @@ function Entity(x, y) {
     }
 
     this.isOnCeiling = function() {
-        if (map.topBorder)
-            return this.y + this.height * scl >= canvasHeight * scl;
-        return false;
+        return map.topBorder == true && this.y + this.height * scl >= map.height();
     }
 
     this.isOnLeftWall = function() {
-        return this.x <= 0;
+        return map.leftBorder == true && this.x <= 0;
     }
 
     this.isOnRightWall = function() {
-        return this.x + this.width * scl >= canvasWidth * scl;
+        return map.rightBorder == true && this.x + this.width * scl >= map.width();
     }
 
     this.scale = function() {
@@ -225,6 +228,6 @@ function Entity(x, y) {
     }
 
     this.show = function() {
-        this.sprite.show(this.x, this.y, this.width * scl, this.height * scl);
+        this.sprite.show(this.x - map.xStart, this.y, this.width * scl, this.height * scl);
     }
 }

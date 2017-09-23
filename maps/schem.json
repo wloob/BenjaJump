@@ -13,10 +13,14 @@
 	"topBorder": "true",
 	"buttomBorder": "true",
 	"leftBorder": "true",
-	"rightBorder": "true",
-	
+	"rightBorder": "true",	
 	"links": [
 		{
+			"target": {
+				"name": "mapname",
+				"x": 0,
+				"y": 0
+			},
 			"type": "down",
 			"min": 0,
 			"max": 1000000
