@@ -1,6 +1,10 @@
 function Player() {
     Entity.call(this, 0, 0);
 
+    this.lastWallJump = 0;
+
+    this.noControlTicks = 0;
+
     this.initiate = function() {
         this.heightOrigin = 1.6;
         this.width = 0.9;
@@ -40,21 +44,21 @@ function Player() {
         airAni.addFrame(getLoadedImage("assets/player/default/air0.png"), 10);
         this.sprite.addAnimation(airAni);
 
+        var wallAni = new Animation("wall");
+        wallAni.addFrame(getLoadedImage("assets/player/default/wall0.png"), 1);
+        this.sprite.addAnimation(wallAni);
+
         this.sprite.setFlipped(true);
     }
 
     this.initiate();
 
     this.playerTick = function() {
-        /*
-        if (down && this.isOnGround() && this.velocity.x == 0) {
-            this.height = 1;
-            this.sprite.playAnimation("crouch");
-        }
+        if (this.noControlTicks > 0)
+            this.noControlTicks--;
 
-        else
-            this.height = this.heightOrigin;
-        */
+        if (this.isOnGround())
+            this.lastWallJump = 0;
 
         if (this.sprite.isFlipped())
             if (this.velocity.x > 0)
@@ -76,21 +80,49 @@ function Player() {
     }
 
     this.moveLeft = function() {
+        if (this.noControlTicks > 0 && this.lastWallJump == 1)
+            return;
+
         if (!this.isOnLeftWall())
             this.velocity.x = -(scl * canvasWidth / 500 * this.runSpeed);
     }
 
     this.moveRight = function() {
+        if (this.noControlTicks > 0 && this.lastWallJump == 2)
+            return;
+
         if (!this.isOnRightWall())
             this.velocity.x = (scl * canvasWidth / 500 * this.runSpeed);
     }
 
     this.jump = function() {
+        if (this.noControlTicks > 0)
+            return;
+
         if (this.isOnGround()) {
             this.y++;
             this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
 
             this.sprite.playAnimation("jump");
+        } else if (this.isOnLeftWall() && this.distanceToGround() > 1.5 && this.velocity.y < 0 && this.lastWallJump != 1) {
+            this.y++;
+            this.x++;
+            this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
+            this.velocity.x = scl * canvasHeight / 200 * this.jumpPower;
+            this.sprite.playAnimation("jump");
+
+            this.lastWallJump = 1;
+            this.noControlTicks = 10;
+
+        } else if (this.isOnRightWall() && this.distanceToGround() > 1.5 && this.velocity.y < 0 && this.lastWallJump != 2) {
+            this.y++;
+            this.x--;
+            this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
+            this.velocity.x = -(scl * canvasHeight / 200 * this.jumpPower);
+            this.sprite.playAnimation("jump");
+
+            this.lastWallJump = 2;
+            this.noControlTicks = 10;
         }
     }
 }

@@ -32,11 +32,25 @@ function Entity(x, y) {
 
         this.sprite.tick();
 
+        this.movementTick();
 
-        movecheck: if (this.velocity.x > 0) {
+        this.gravityTick();
+
+        this.collisionCheck();
+
+        if (this.controlCamera)
+            this.updateCamera();
+
+        this.updatePosition();
+
+        this.linkCheck();
+    }
+
+    this.movementTick = function() {
+        if (this.velocity.x > 0) {
             if (this.isOnRightWall()) {
                 this.velocity.x = 0;
-                break movecheck;
+                return;
             }
             if (this.isOnGround())
                 this.velocity.x -= this.xDecreaseGround;
@@ -46,7 +60,7 @@ function Entity(x, y) {
         } else if (this.velocity.x < 0) {
             if (this.isOnLeftWall()) {
                 this.velocity.x = 0;
-                break movecheck;
+                return;
             }
             if (this.isOnGround())
                 this.velocity.x += this.xDecreaseGround;
@@ -54,35 +68,43 @@ function Entity(x, y) {
                 this.velocity.x += this.xDecrease;
             this.velocity.x = constrain(this.velocity.x, Number.NEGATIVE_INFINITY, 0);
         }
+    }
 
-
-        if (this.isOnGround()) {
-            this.velocity.y = 0;
-        } else {
+    this.gravityTick = function() {
+        if (!this.isOnGround()) {
             if (down)
                 this.velocity.y -= (this.yDecrease / 2.5 * this.gravity) * 2;
             else if (up && this.velocity.y > 0)
                 this.velocity.y -= (this.yDecrease / 2.5 * this.gravity) * 0.55;
             else
                 this.velocity.y -= this.yDecrease / 2.5 * this.gravity;
+        } else
+            this.velocity.y = 0;
+
+
+        if (!this.isOnGround() && (this.isOnLeftWall() || this.isOnRightWall()) && this.distanceToGround() > 1.5) {
+            if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
+                this.velocity.y = -3;
+                this.sprite.playAnimation("wall");
+            }
         }
+
+
 
         if (this.velocity.y < -25)
             this.velocity.y = -25;
-
 
         if (this.isOnCeiling()) {
             this.y--;
             this.velocity.y = 0;
         }
+    }
 
-        //COLLISION CHECK
+    this.collisionCheck = function() {
         while (map.collisionRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
-            //console.log("collision at (" + this.x + ";" + this.y + ") + (" + this.velocity.x + ";" + this.velocity.y + ") at scale: " + scl);
 
-            //VERTICALLY
+            //VERTICAL
             while (map.collisionRect(this.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
-                //console.log("collision at velY: " + this.velocity.y);
                 if (this.velocity.y > 0) {
                     this.velocity.y--;
                     if (this.velocity.y < 0)
@@ -97,7 +119,6 @@ function Entity(x, y) {
 
             //HORIZONTAL
             while (map.collisionRect(this.x + this.velocity.x, this.y, this.width * scl, this.height * scl)) {
-                //console.log("collision at velX: " + this.velocity.x);
                 if (this.velocity.x > 0) {
                     this.velocity.x--;
                     if (this.velocity.x < 0)
@@ -112,8 +133,6 @@ function Entity(x, y) {
 
             //STRAIGHT
             while (map.collisionRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
-                //console.log("collision at velX: " + this.velocity.x + ", velY=" + this.velocity.y);
-
                 if (this.velocity.x > 0) {
                     this.velocity.x--;
                     if (this.velocity.x < 0)
@@ -134,19 +153,21 @@ function Entity(x, y) {
                 }
             }
         }
+    }
 
-        if (this.controlCamera) {
-            if (this.velocity.x > 0 && this.x > width / 3 * 2)
-                map.moveStart(this.velocity.x, 0);
-            else if (this.velocity.x < 0 && this.x - map.xStart < width / 3)
-                map.moveStart(this.velocity.x, 0);
+    this.updateCamera = function() {
+        if (this.velocity.x > 0 && this.x > width / 3 * 2)
+            map.moveStart(this.velocity.x, 0);
+        else if (this.velocity.x < 0 && this.x - map.xStart < width / 3)
+            map.moveStart(this.velocity.x, 0);
 
-            if (this.velocity.y > 0 && this.y - map.yStart > height / 2)
-                map.moveStart(0, this.velocity.y);
-            else if (this.velocity.y < 0 && this.y - map.yStart < height / 2)
-                map.moveStart(0, this.velocity.y);
-        }
+        if (this.velocity.y > 0 && this.y - map.yStart > height / 2)
+            map.moveStart(0, this.velocity.y);
+        else if (this.velocity.y < 0 && this.y - map.yStart < height / 2)
+            map.moveStart(0, this.velocity.y);
+    }
 
+    this.updatePosition = function() {
         this.x += this.velocity.x;
         this.y += this.velocity.y;
 
@@ -168,11 +189,11 @@ function Entity(x, y) {
             maxY = Number.MAX_VALUE;
 
 
-        this.x = constrain(this.x, minX, maxX);   //RETURNEREDE MIN VÆRDI NÅR NEGATIV
+        this.x = constrain(this.x, minX, maxX);
         this.y = constrain(this.y, minY, maxY);
+    }
 
-
-        //LINK CHECK
+    this.linkCheck = function() {
         if (this.y - this.height * scl > map.height() - this.height * scl && map.getLink("up", this.x / scl) != null) {
             var link = map.getLink("up", this.x / scl);
 
@@ -210,22 +231,61 @@ function Entity(x, y) {
         if (map.buttomBorder == true && this.y <= 0)
             return true;
 
-        else if (map.collision(this.x, this.y - 1) || map.collision(this.x + this.width * scl - 1, this.y - 1) || map.collision(this.x + this.width / 2 * scl - 1, this.y - 1))
+        else if (map.collision(this.x, this.y - 1)
+         || map.collision(this.x + this.width * scl - 1, this.y - 1)
+         || map.collision(this.x + this.width / 2 * scl - 1, this.y - 1))
             return true;
 
         return false;
     }
 
     this.isOnCeiling = function() {
-        return map.topBorder == true && this.y + this.height * scl >= map.height();
+        if (map.topBorder == true && this.y + this.height * scl >= map.height())
+            return true;
+
+        else if (map.collision(this.x, this.y + this.height * scl)
+         || map.collision(this.x + this.width * scl / 2, this.y + this.height * scl)
+         || map.collision(this.x + this.width * scl - 1, this.y + this.height * scl))
+            return true;
+
+        return false;
     }
 
     this.isOnLeftWall = function() {
-        return map.leftBorder == true && this.x <= 0;
+        if (map.leftBorder == true && this.x <= 0)
+            return true;
+
+        else if (map.collision(this.x - 1, this.y)
+         || map.collision(this.x - 1, this.y + this.height * scl / 2)
+         || map.collision(this.x - 1, this.y + this.height * scl - 1))
+            return true;
+
+        return false;
     }
 
     this.isOnRightWall = function() {
-        return map.rightBorder == true && this.x + this.width * scl >= map.width();
+        if (map.rightBorder == true && this.x + this.width * scl >= map.width())
+            return true;
+
+        else if (map.collision(this.x + this.width * scl, this.y)
+         || map.collision(this.x + this.width * scl, this.y + this.height * scl / 2)
+         || map.collision(this.x + this.width * scl, this.y + this.height * scl - 1))
+            return true;
+
+        return false;
+    }
+
+    this.distanceToGround = function() {
+        if (this.isOnGround())
+            return 0;
+        else {
+            var i = 0;
+            while(!map.collisionRect(this.x, this.y - i, this.width, this.height) && this.y - i > 0) {
+                i++;
+            }
+
+            return i / scl;
+        }
     }
 
     this.scale = function() {

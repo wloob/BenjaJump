@@ -42,6 +42,9 @@ function Map() {
     this.spawnY = 0;
     this.backgroundImage = null;
 
+    this.tileWidth = 30;
+    this.tileHeight = 15;
+
     this.topBorder = true;
     this.buttomBorder = true;
     this.leftBorder = true;
@@ -89,14 +92,13 @@ function Map() {
     this.moveStart = function(addedX, addedY) {
         if (addedX < 0 && this.xStart + addedX >= 0)
             this.xStart+=addedX;
-        else if (addedX > 0 && this.xStart + addedX < (this.tileColumns.length - canvasWidth) * scl) // total mulig - aktuel
+        else if (addedX > 0 && this.xStart + addedX < (this.tileWidth - canvasWidth) * scl) // total mulig - aktuel
             this.xStart+=addedX;
 
-        //console.log("startX index = " + Math.floor(this.xStart));
 
         if (addedY < 0 && this.yStart + addedY >= 0)
             this.yStart+=addedY;
-        else if (addedY > 0 && this.yStart + addedY < (this.tileColumns[Math.floor(this.xStart / scl)].length - canvasHeight) * scl) // total mulig - aktuel
+        else if (addedY > 0 && this.yStart + addedY < (this.tileHeight - canvasHeight) * scl) // total mulig - aktuel
             this.yStart+=addedY;
     }
 
@@ -152,6 +154,13 @@ function Map() {
             empty.fill(0);
             this.tileColumns.push(empty);
         }
+
+        this.tileWidth = this.tileColumns.length;
+        this.tileHeight = 0;
+        for (i = 0; i < this.tileColumns.length; i++)
+            if (this.tileColumns[i].length > this.tileHeight)
+                this.tileHeight = this.tileColumns[i].length;
+
         this.name = this.file.name;
 
         this.spawnX = this.file.spawnX;
@@ -184,6 +193,12 @@ function Map() {
         }
 
         this.yStart = 0;
+        if (player.y >= canvasHeight * scl / 2) {
+            this.yStart = player.y - canvasHeight * scl / 2;
+
+            if (this.yStart > (this.height() - canvasHeight * scl))
+                this.yStart = (this.height() - canvasHeight * scl);
+        }
     }
 }
 

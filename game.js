@@ -50,6 +50,8 @@ function preload() {
     addLoadedImage("assets/player/default/jump2.png");
     addLoadedImage("assets/player/default/jump3.png");
 
+    addLoadedImage("assets/player/default/wall0.png");
+
     scaleCanvas();
 }
 
