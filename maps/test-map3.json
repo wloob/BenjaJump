@@ -1,7 +1,7 @@
 {
 	"name":"TestMap 3",
 	"spawnX":2,
-	"spawnY":7.5,
+	"spawnY":9,
 	"background":"hills.png",
 	"tiles":[
 		[ 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 2,0],
