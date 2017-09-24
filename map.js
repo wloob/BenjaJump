@@ -27,9 +27,19 @@ function LoadedMap(name, file) {
     this.file = file;
 }
 
-function Block(x, y) {
-    this.x = x;
-    this.y = y;
+function sameBlock(block1, block2) {
+    return block1.x == block2.x && block1.y == block2.y;
+}
+
+function sameBlockList(list1, list2) {
+    if (list1.length != list2.length)
+        return false;
+
+    for (i = 0; i < list1.length; i++) {
+        if (list1[i].x != list2[i].x || list1[i].y != list2[i].y)
+            return false;
+    }
+    return true;
 }
 
 
@@ -134,12 +144,22 @@ function Map() {
     }
 
     this.getBlockAt = function(x, y) {
-        if (x < 0 || y < 0 || x >= this.width() || y >= this.height()) {
+        if (x < 0 || y < 0 || x >= this.width() || y >= this.height() || isNaN(x) || isNaN(y)) {
             return {x: -1, y: -1, id: 0};
         }
 
-
         return {x: Math.floor(x / scl), y: Math.floor(y / scl), id: this.tileColumns[Math.floor(x / scl)][Math.floor(y / scl)]};
+    }
+
+    this.getBlocksAtRect = function(x, y, w, h) {
+        return [this.getBlockAt(x, y), this.getBlockAt(x, y + h - 1), this.getBlockAt(x + w - 1, y + h - 1), this.getBlockAt(x + w - 1, y)];
+    }
+
+    this.sameBlocksAt = function(x1, y1, x2, y2) {
+        var block1 = this.getBlockAt(x1, y1);
+        var block2 = this.getBlockAt(x2, y2);
+
+        return block1.x == block2.x && block1.y == block2.y;
     }
 
     this.getLink = function(type, val) {

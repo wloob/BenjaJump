@@ -36,7 +36,17 @@ function Entity(x, y) {
 
         this.gravityTick();
 
+
+
         this.collisionCheck();
+
+        //this.collisionCheck();
+        //console.log("colcheck");
+
+        if (!sameBlock(this.blockAtFeet(), this.blockAtFeet(this.velocity.x, this.velocity.y)) ||
+        !sameBlock(this.blockAtHead(), this.blockAtHead(this.velocity.x, this.velocity.y))) {
+            this.collisionCheck();
+        } //Entered new block!
 
         if (this.controlCamera)
             this.updateCamera();
@@ -72,9 +82,9 @@ function Entity(x, y) {
 
     this.gravityTick = function() {
         if (!this.isOnGround()) {
-            if (down)
+            if (down && this instanceof Player)
                 this.velocity.y -= (this.yDecrease / 2.5 * this.gravity) * 2;
-            else if (up && this.velocity.y > 0)
+            else if (up && this.velocity.y > 0 && this instanceof Player)
                 this.velocity.y -= (this.yDecrease / 2.5 * this.gravity) * 0.55;
             else
                 this.velocity.y -= this.yDecrease / 2.5 * this.gravity;
@@ -83,17 +93,15 @@ function Entity(x, y) {
         }
 
 
-        if (!this.isOnGround() && (this.isOnLeftWall() || this.isOnRightWall()) && this.distanceToGround() > 0.5) {
+        if (this instanceof Player && !this.isOnGround() && (this.isOnLeftWall() || this.isOnRightWall()) && this.distanceToGround() > 0.5) {
             if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
                 this.velocity.y = -3;
                 this.sprite.playAnimation("wall");
             }
         }
 
-
-
-        if (this.velocity.y < -25)
-            this.velocity.y = -25;
+        if (this.velocity.y < -scl / 2)
+            this.velocity.y = -scl / 2;
 
         if (this.isOnCeiling()) {
             this.y--;
@@ -102,56 +110,57 @@ function Entity(x, y) {
     }
 
     this.collisionCheck = function() {
+
+        if (sameBlockList(map.getBlocksAtRect(this.x, this.y, this.width * scl, this.height * scl),
+        map.getBlocksAtRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl))) {
+            return; //no change in blocks
+        }
+
+        //VERTICAL
+        while (map.collisionRect(this.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
+            if (this.velocity.y > 0) {
+                this.velocity.y--;
+                if (this.velocity.y < 0)
+                    this.velocity.y = 0;
+            } else if (this.velocity.y < 0) {
+                this.velocity.y++;
+                if (this.velocity.y > 0)
+                    this.velocity.y = 0;
+            }
+        }
+
+        //HORIZONTAL
+        while (map.collisionRect(this.x + this.velocity.x, this.y, this.width * scl, this.height * scl)) {
+            if (this.velocity.x > 0) {
+                this.velocity.x--;
+                if (this.velocity.x < 0)
+                    this.velocity.x = 0;
+            } else if (this.velocity.x < 0) {
+                this.velocity.x++;
+                if (this.velocity.x > 0)
+                    this.velocity.x = 0;
+            }
+        }
+
+        //STRAIGHT
         while (map.collisionRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
-
-            //VERTICAL
-            while (map.collisionRect(this.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
-                if (this.velocity.y > 0) {
-                    this.velocity.y--;
-                    if (this.velocity.y < 0)
-                        this.velocity.y = 0;
-                } else if (this.velocity.y < 0) {
-                    this.velocity.y++;
-                    if (this.velocity.y > 0)
-                        this.velocity.y = 0;
-                }
-
+            if (this.velocity.x > 0) {
+                this.velocity.x--;
+                if (this.velocity.x < 0)
+                    this.velocity.x = 0;
+            } else if (this.velocity.x < 0) {
+                this.velocity.x++;
+                if (this.velocity.x > 0)
+                    this.velocity.x = 0;
             }
-
-            //HORIZONTAL
-            while (map.collisionRect(this.x + this.velocity.x, this.y, this.width * scl, this.height * scl)) {
-                if (this.velocity.x > 0) {
-                    this.velocity.x--;
-                    if (this.velocity.x < 0)
-                        this.velocity.x = 0;
-                } else if (this.velocity.x < 0) {
-                    this.velocity.x++;
-                    if (this.velocity.x > 0)
-                        this.velocity.x = 0;
-                }
-
-            }
-
-            //STRAIGHT
-            while (map.collisionRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl)) {
-                if (this.velocity.x > 0) {
-                    this.velocity.x--;
-                    if (this.velocity.x < 0)
-                        this.velocity.x = 0;
-                } else if (this.velocity.x < 0) {
-                    this.velocity.x++;
-                    if (this.velocity.x > 0)
-                        this.velocity.x = 0;
-                }
-                if (this.velocity.y > 0) {
-                    this.velocity.y--;
-                    if (this.velocity.y < 0)
-                        this.velocity.y = 0;
-                } else if (this.velocity.y < 0) {
-                    this.velocity.y++;
-                    if (this.velocity.y > 0)
-                        this.velocity.y = 0;
-                }
+            if (this.velocity.y > 0) {
+                this.velocity.y--;
+                if (this.velocity.y < 0)
+                    this.velocity.y = 0;
+            } else if (this.velocity.y < 0) {
+                this.velocity.y++;
+                if (this.velocity.y > 0)
+                    this.velocity.y = 0;
             }
         }
     }
@@ -164,11 +173,6 @@ function Entity(x, y) {
 
 
         map.setStartY((this.y + this.height / 2) - height / 2);
-
-        /*if (this.velocity.y > 0 && this.y + this.height * scl - map.yStart > height / 2)
-            map.moveStart(0, this.velocity.y);
-        else if (this.velocity.y < 0 && this.y + this.height * scl - map.yStart < height / 2)
-            map.moveStart(0, this.velocity.y);*/
     }
 
     this.updatePosition = function() {
@@ -290,6 +294,14 @@ function Entity(x, y) {
 
             return i / scl;
         }
+    }
+
+    this.blockAtFeet = function(addedX = 0, addedY = 0) {
+        return map.getBlockAt(this.x + addedX + this.width / 2 - 1, this.y + addedY);
+    }
+
+    this.blockAtHead = function(addedX = 0, addedY = 0) {
+        return map.getBlockAt(this.x + addedX + this.width / 2 - 1, this.y + addedY + this.height - 1);
     }
 
     this.scale = function() {
