@@ -93,7 +93,7 @@ function Entity(x, y) {
         }
 
 
-        if (this instanceof Player && !this.isOnGround() && (this.isOnLeftWall() || this.isOnRightWall()) && this.distanceToGround() > 0.5) {
+        if (this instanceof Player && !this.isOnGround() && ((this.isOnLeftWall() && this.lastWallJump != 1) || (this.isOnRightWall() && this.lastWallJump != 2)) && this.distanceToGround() > 0.5) {
             if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
                 this.velocity.y = -3;
                 this.sprite.playAnimation("wall");
