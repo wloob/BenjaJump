@@ -40,6 +40,9 @@ function preload() {
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
 
+    addLoadedImage("assets/player/default/idle0.png");
+    addLoadedImage("assets/player/default/idle1.png");
+
     addLoadedImage("assets/player/default/run0.png");
     addLoadedImage("assets/player/default/run1.png");
     addLoadedImage("assets/player/default/run2.png");
@@ -106,9 +109,9 @@ function tick() {
 }
 
 function move() {
-    if (right)
+    if (right && !left)
         player.moveRight();
-    if (left)
+    if (left && !right)
         player.moveLeft();
     if (up)
         player.jump();

@@ -8,6 +8,8 @@ function Player() {
     this.jumpHeld = false;
     this.lastWallJump = 0;
 
+    this.standTicks = 0;
+
     this.noControlTicks = 0;
 
     this.initiate = function() {
@@ -32,6 +34,11 @@ function Player() {
         standAni.addFrame(getLoadedImage("assets/player/default/stand0.png"), 7);
         standAni.addFrame(getLoadedImage("assets/player/default/stand1.png"), 13);
         this.sprite.addAnimation(standAni);
+
+        var idleAni = new Animation("idle");
+        idleAni.addFrame(getLoadedImage("assets/player/default/idle0.png"), 7);
+        idleAni.addFrame(getLoadedImage("assets/player/default/idle1.png"), 13);
+        this.sprite.addAnimation(idleAni);
 
         var runAni = new Animation("run");
         runAni.addFrame(getLoadedImage("assets/player/default/run0.png"), 4);
@@ -82,8 +89,14 @@ function Player() {
         if (this.isOnGround() && this.sprite.currentAnimation().name != "crouch") {
             this.sprite.skipAnimation();
 
-            if (this.velocity.x == 0)
-                this.sprite.setAnimation("stand");
+            if (this.velocity.x == 0) {
+                if (this.standTicks > 0) {
+                    this.sprite.setAnimation("stand");
+                    this.standTicks--;
+                } else {
+                    this.sprite.setAnimation("idle");
+                }
+            }
             else
                 this.sprite.setAnimation("run");
         } else
@@ -96,6 +109,8 @@ function Player() {
 
         if (!this.isOnLeftWall())
             this.velocity.x = -(scl * canvasWidth / 500 * this.runSpeed);
+
+        this.standTicks = 100;
     }
 
     this.moveRight = function() {
@@ -104,6 +119,8 @@ function Player() {
 
         if (!this.isOnRightWall())
             this.velocity.x = (scl * canvasWidth / 500 * this.runSpeed);
+
+        this.standTicks = 100;
     }
 
     this.jump = function() {
