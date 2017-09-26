@@ -227,6 +227,9 @@ function Map() {
             if (this.yStart > (this.height() - canvasHeight * scl))
                 this.yStart = (this.height() - canvasHeight * scl);
         }
+
+        player.lastWallJump = -1;
+        player.lastWallDir = -1;
     }
 }
 
