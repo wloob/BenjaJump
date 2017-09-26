@@ -1,6 +1,10 @@
 function Player() {
     Entity.call(this, 0, 0);
 
+    this.health = 3;
+
+    this.inventory = new Inventory();
+
     this.jumpHeld = false;
     this.lastWallJump = 0;
 
@@ -10,6 +14,9 @@ function Player() {
         this.heightOrigin = 1.6;
         this.width = 0.9;
         this.height = 1.6;
+
+        this.inventory.items.push(new Item("tommygun", getLoadedImage("assets/icon/tommygun.png")));
+        this.inventory.items.push(new Item("goldkey", getLoadedImage("assets/icon/goldkey.png")));
 
         this.runSpeed = 4;
         this.gravity = 4;

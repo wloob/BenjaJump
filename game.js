@@ -15,6 +15,8 @@ var borderHeight = 30;
 var oldScl;
 
 var player;
+var gui;
+
 var right = false;
 var left = false;
 var up = false;
@@ -53,6 +55,12 @@ function preload() {
 
     addLoadedImage("assets/player/default/wall0.png");
 
+    addLoadedImage("assets/icon/heart.png");
+    addLoadedImage("assets/icon/slot.png");
+    addLoadedImage("assets/icon/goldkey.png");
+
+    addLoadedImage("assets/icon/tommygun.png");
+
     scaleCanvas();
 }
 
@@ -63,6 +71,8 @@ function setup() {
     oldScl = scl;
 
     player = new Player();
+
+    gui = new GUI();
 
     map = new Map();
     map.initiate("test-map3");
@@ -81,7 +91,11 @@ function draw() {
 
     map.draw();
 
+    gui.show();
+
     player.show();
+
+
 }
 
 function tick() {
@@ -129,6 +143,7 @@ function windowResized() {
     scaleCanvas();
     map.scale();
     player.scale();
+    gui.scale();
 
     oldScl = scl;
 
