@@ -229,12 +229,12 @@ function Entity(x, y) {
     }
 
     this.isOnCeiling = function() {
-        if (map.topBorder == true && Math.floor(this.y) + this.height * scl >= map.height())
+        if (map.topBorder == true && this.y + this.height * scl >= map.height())
             return true;
 
-        else if (map.collision(this.x, Math.floor(this.y) + this.height * scl)
-         || map.collision(this.x + this.width * scl / 2, Math.floor(this.y) + this.height * scl)
-         || map.collision(this.x + this.width * scl - 1, Math.floor(this.y) + this.height * scl))
+        else if (map.collision(this.x, this.y + this.height * scl)
+         || map.collision(this.x + this.width * scl / 2, this.y + this.height * scl)
+         || map.collision(this.x + this.width * scl - 1, this.y + this.height * scl))
             return true;
 
         return false;
