@@ -9,54 +9,33 @@ function Entity(x, y) {
 
     this.velocity = new p5.Vector(0, 0);
 
-    this.runSpeed = 1;
-    this.gravity = 1;
-    this.jumpPower = 1;
-
     this.xDecrease = scl / 30;
     this.xDecreaseGround = scl / 15;
     this.yDecrease = scl / 100;
 
-    this.controlCamera;
-
-    this.initiate = function() {
-        //Setting child entity values
-        //console.log("parent init");
-    }
-
-    this.entityTick = function(){}
+    this.controlCamera = false;
 
     this.tick = function() {
-        if (scl != oldScl)
+        if (scl != oldScl) //Skip during change in window size
             return;
 
         this.sprite.tick();
 
         this.movementTick();
-
         this.gravityTick();
 
-
-
         this.collisionCheck();
-
-        //this.collisionCheck();
-        //console.log("colcheck");
-
-        if (!sameBlock(this.blockAtFeet(), this.blockAtFeet(this.velocity.x, this.velocity.y)) ||
-        !sameBlock(this.blockAtHead(), this.blockAtHead(this.velocity.x, this.velocity.y))) {
-            this.collisionCheck();
-        } //Entered new block!
 
         if (this.controlCamera)
             this.updateCamera();
 
         this.updatePosition();
 
-        this.linkCheck();
+        this.mapLinkCheck();
     }
 
     this.movementTick = function() {
+        //DECREASE IN X-VELOCITY
         if (this.velocity.x > 0) {
             if (this.isOnRightWall()) {
                 this.velocity.x = 0;
@@ -81,6 +60,8 @@ function Entity(x, y) {
     }
 
     this.gravityTick = function() {
+        //CHANGE IN Y-VELOCITY BASED ON GRAVITY
+
         if (!this.isOnGround()) {
             if (down && this instanceof Player)
                 this.velocity.y -= (this.yDecrease / 2.5 * this.gravity) * 2;
@@ -94,7 +75,7 @@ function Entity(x, y) {
 
 
         if (this instanceof Player && !this.isOnGround() && ((this.isOnLeftWall() && this.lastWallJump != this.blockAtHead().x)
-        || (this.isOnRightWall() && this.lastWallJump != this.blockAtHead().x)) && this.distanceToGround() > 0.5) {
+        || (this.isOnRightWall() && this.lastWallJump != this.blockAtHead().x)) && this.distanceToGround() > 1) {
             if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
                 this.velocity.y = -3;
                 this.sprite.playAnimation("wall");
@@ -111,7 +92,6 @@ function Entity(x, y) {
     }
 
     this.collisionCheck = function() {
-
         if (sameBlockList(map.getBlocksAtRect(this.x, this.y, this.width * scl, this.height * scl),
         map.getBlocksAtRect(this.x + this.velocity.x, this.y + this.velocity.y, this.width * scl, this.height * scl))) {
             return; //no change in blocks
@@ -202,7 +182,7 @@ function Entity(x, y) {
         this.y = constrain(this.y, minY, maxY);
     }
 
-    this.linkCheck = function() {
+    this.mapLinkCheck = function() {
         if (this.y - this.height * scl > map.height() - this.height * scl && map.getLink("up", this.x / scl) != null) {
             var link = map.getLink("up", this.x / scl);
 
@@ -237,24 +217,24 @@ function Entity(x, y) {
     }
 
     this.isOnGround = function() {
-        if (map.buttomBorder == true && this.y <= 0)
+        if (map.buttomBorder == true && Math.floor(this.y) <= 0)
             return true;
 
-        else if (map.collision(this.x, this.y - 1)
-         || map.collision(this.x + this.width * scl - 1, this.y - 1)
-         || map.collision(this.x + this.width / 2 * scl - 1, this.y - 1))
+        else if (map.collision(this.x, Math.floor(this.y) - 1)
+         || map.collision(this.x + this.width * scl - 1, Math.floor(this.y) - 1)
+         || map.collision(this.x + this.width / 2 * scl - 1, Math.floor(this.y) - 1))
             return true;
 
         return false;
     }
 
     this.isOnCeiling = function() {
-        if (map.topBorder == true && this.y + this.height * scl >= map.height())
+        if (map.topBorder == true && Math.floor(this.y) + this.height * scl >= map.height())
             return true;
 
-        else if (map.collision(this.x, this.y + this.height * scl)
-         || map.collision(this.x + this.width * scl / 2, this.y + this.height * scl)
-         || map.collision(this.x + this.width * scl - 1, this.y + this.height * scl))
+        else if (map.collision(this.x, Math.floor(this.y) + this.height * scl)
+         || map.collision(this.x + this.width * scl / 2, Math.floor(this.y) + this.height * scl)
+         || map.collision(this.x + this.width * scl - 1, Math.floor(this.y) + this.height * scl))
             return true;
 
         return false;

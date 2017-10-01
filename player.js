@@ -74,10 +74,11 @@ function Player() {
         if (this.noControlTicks > 0)
             this.noControlTicks--;
 
-        if (this.isOnGround())
+        if (this.isOnGround()) {
             this.lastWallJump = 0;
+        }
 
-        if (!up && (this.isOnLeftWall() || this.isOnRightWall()))
+        if (!up)
             this.jumpHeld = false;
 
         if (this.sprite.isFlipped())
@@ -112,7 +113,7 @@ function Player() {
         if (!this.isOnLeftWall())
             this.velocity.x = -(scl * canvasWidth / 500 * this.runSpeed);
 
-        this.standTicks = 100;
+        this.standTicks = 50;
     }
 
     this.moveRight = function() {
@@ -122,7 +123,7 @@ function Player() {
         if (!this.isOnRightWall())
             this.velocity.x = (scl * canvasWidth / 500 * this.runSpeed);
 
-        this.standTicks = 100;
+        this.standTicks = 50;
     }
 
     this.jump = function() {
@@ -138,7 +139,8 @@ function Player() {
             this.sprite.playAnimation("jump");
 
 
-        } else if ((this.isOnLeftWall() || this.isOnRightWall() && this.distanceToGround() > 0.5 && this.velocity.y <= 0 && !this.jumpHeld && this.lastWallJump != this.blockAtHead().x)) {
+        } else if ((this.isOnLeftWall() || this.isOnRightWall()) && !this.jumpHeld && this.distanceToGround() > 1 && this.velocity.y <= 0 && this.lastWallJump != this.blockAtHead().x) {
+
             this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
 
             if (this.isOnLeftWall()) {
@@ -150,33 +152,13 @@ function Player() {
                 this.lastWallJumpDir = 2;
             }
 
+            this.jumpHeld = true;
+
             this.sprite.playAnimation("jump");
 
             this.lastWallJump = this.blockAtHead().x;
             this.noControlTicks = 10;
         }
-
-        /*
-        } else if (this.isOnLeftWall() && this.distanceToGround() > 0.5 && this.velocity.y < 0 && this.lastWallJump != this.blockAtHead().x && !this.jumpHeld) {
-            this.y++;
-            this.x++;
-            this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
-            this.velocity.x = scl * canvasHeight / 200 * this.jumpPower;
-            this.sprite.playAnimation("jump");
-
-            this.lastWallJump = this.blockAtHead().x;
-            this.noControlTicks = 10;
-
-        } else if (this.isOnRightWall() && this.distanceToGround() > 0.5 && this.velocity.y < 0 && this.lastWallJump != this.blockAtHead().x && !this.jumpHeld) {
-            this.y++;
-            this.x--;
-            this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
-            this.velocity.x = -(scl * canvasHeight / 200 * this.jumpPower);
-            this.sprite.playAnimation("jump");
-
-            this.lastWallJump = this.blockAtHead().x;
-            this.noControlTicks = 10;
-        }*/
     }
 }
 Player.prototype = new Entity();
