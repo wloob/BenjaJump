@@ -27,6 +27,7 @@ function LoadedMap(name, file) {
     this.file = file;
 }
 
+
 function sameBlock(block1, block2) {
     return block1.x == block2.x && block1.y == block2.y;
 }
@@ -121,18 +122,21 @@ function Map() {
     }
 
     this.collision = function(x, y) {
-        if (x < 0 || y < 0)
+        if (x < 0 || y < 0 || x > this.width() || y > this.height())
             return false;
 
         if (Math.floor((x - this.xStart) / scl) > this.tileColumns.length || Math.floor((y - this.yStart) / scl) > this.tileColumns.length)
             return false;
 
-        return this.getBlockAt(x, y).id > 0;
+        if (this.getTileAt(x, y) == null)
+            return false;
+
+        return this.getTileAt(x, y).hitbox === true;
     }
 
     this.collisionRect = function(x, y, w, h) {
         //CORNERS
-        if (this.collision(x, y) || this.collision(x, y + h - 1) || this.collision(x + w - 1, y + h - 1) || this.collision(x + w - 1, y)) {
+        if (this.collision(x, y)  || this.collision(x, y + h - 1) || this.collision(x + w - 1, y + h - 1) || this.collision(x + w - 1, y)) {
             return true;
         }
 
@@ -141,6 +145,14 @@ function Map() {
             return true;
         }
             return false;
+    }
+
+    this.getTileAt = function(x, y) {
+        if (x < 0 || y < 0 || x >= this.width() || y >= this.height() || isNaN(x) || isNaN(y)) {
+            return getTile(0);
+        }
+
+        return getTile(this.tileColumns[Math.floor(x / scl)][Math.floor(y / scl)]);
     }
 
     this.getBlockAt = function(x, y) {
@@ -212,13 +224,14 @@ function Map() {
 
         this.links = this.file.links;
 
-        this.xStart = 0;
-        if (player.x >= canvasWidth * scl / 2) {
-            this.xStart = player.x - canvasWidth * scl / 2;
+        this.xStart = player.x - (canvasWidth * scl / 2);
 
-            if (this.xStart > (this.width() - canvasWidth * scl))
-                this.xStart = (this.width() - canvasWidth * scl);
-        }
+        if (this.xStart < 0)
+            this.xStart = 0;
+
+        if (this.xStart > (this.width() - canvasWidth * scl))
+            this.xStart = (this.width() - canvasWidth * scl);
+
 
         this.yStart = 0;
         if (player.y >= canvasHeight * scl / 2) {
@@ -234,7 +247,9 @@ function Map() {
 }
 
 function getTileImg(id) {
-    return getLoadedImage("assets/texture/tiles/" + id + ".png");
+    if (getTile(id) != null)
+        return getTile(id).img;
+    return null;
 }
 
 function setTile(x, y, id) {

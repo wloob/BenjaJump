@@ -14,6 +14,8 @@ function Player() {
 
     this.noControlTicks = 0;
 
+    this.ducking = false;
+
     this.initiate = function() {
         this.heightOrigin = 1.6;
         this.width = 0.9;
@@ -36,6 +38,10 @@ function Player() {
         standAni.addFrame(getLoadedImage("assets/player/default/stand0.png"), 7);
         standAni.addFrame(getLoadedImage("assets/player/default/stand1.png"), 13);
         this.sprite.addAnimation(standAni);
+
+        var duckAni = new Animation("duck");
+        duckAni.addFrame(getLoadedImage("assets/player/default/duck0.png"), 10);
+        this.sprite.addAnimation(duckAni);
 
         var idleAni = new Animation("idle");
         idleAni.addFrame(getLoadedImage("assets/player/default/idle0.png"), 7);
@@ -71,6 +77,26 @@ function Player() {
     this.initiate();
 
     this.playerTick = function() {
+        if ((down && this.isOnGround()) || map.collisionRect(this.x, this.y, this.width * scl, this.heightOrigin * scl)) {
+            this.sprite.setAnimation("duck");
+            this.height = this.heightOrigin / 2;
+
+            this.ducking = true;
+            return;
+        } else {
+            this.height = this.heightOrigin;
+
+            this.ducking = false;
+        }
+
+        if (!this.isOnGround() && ((this.isOnLeftWall() || this.isOnRightWall())
+        && this.lastWallJump != this.blockAtHead().x) && this.distanceToGround() > 1) {
+            if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
+                this.velocity.y = -3;
+                this.sprite.playAnimation("wall");
+            }
+        }
+
         if (this.noControlTicks > 0)
             this.noControlTicks--;
 
@@ -107,6 +133,9 @@ function Player() {
     }
 
     this.moveLeft = function() {
+        if (this.ducking && this.isOnGround())
+            return;
+
         if (this.noControlTicks > 0 && this.lastWallJumpDir == 1)
             return;
 
@@ -117,6 +146,9 @@ function Player() {
     }
 
     this.moveRight = function() {
+        if (this.ducking && this.isOnGround())
+            return;
+
         if (this.noControlTicks > 0 && this.lastWallJumpDir == 2)
             return;
 
@@ -130,7 +162,7 @@ function Player() {
         if (this.noControlTicks > 0)
             return;
 
-        if (this.isOnGround()) {
+        if (this.isOnGround() && !map.collisionRect(this.x, this.y, this.width * scl, this.heightOrigin * scl)) {
             this.y++;
             this.velocity.y = scl * canvasHeight / 200 * this.jumpPower;
 

@@ -5,6 +5,7 @@ function Entity(x, y) {
     this.sprite = new Sprite();
 
     this.width = 1;
+    this.heightOrigin = 1;
     this.height = 1;
 
     this.velocity = new p5.Vector(0, 0);
@@ -18,6 +19,7 @@ function Entity(x, y) {
     this.tick = function() {
         if (scl != oldScl) //Skip during change in window size
             return;
+
 
         this.sprite.tick();
 
@@ -41,9 +43,10 @@ function Entity(x, y) {
                 this.velocity.x = 0;
                 return;
             }
-            if (this.isOnGround())
-                this.velocity.x -= this.xDecreaseGround;
-            else
+            if (this.isOnGround()) {
+                if (!map.collisionRect(this.x, this.y, this.width * scl, this.heightOrigin * scl))
+                    this.velocity.x -= this.xDecreaseGround * this.tileBelow().friction;
+            } else
                 this.velocity.x -= this.xDecrease;
             this.velocity.x = constrain(this.velocity.x, 0, Number.POSITIVE_INFINITY);
         } else if (this.velocity.x < 0) {
@@ -51,9 +54,10 @@ function Entity(x, y) {
                 this.velocity.x = 0;
                 return;
             }
-            if (this.isOnGround())
-                this.velocity.x += this.xDecreaseGround;
-            else
+            if (this.isOnGround()) {
+                if (!map.collisionRect(this.x, this.y, this.width * scl, this.heightOrigin * scl))
+                    this.velocity.x += this.xDecreaseGround * this.tileBelow().friction;
+            } else
                 this.velocity.x += this.xDecrease;
             this.velocity.x = constrain(this.velocity.x, Number.NEGATIVE_INFINITY, 0);
         }
@@ -71,15 +75,6 @@ function Entity(x, y) {
                 this.velocity.y -= this.yDecrease / 2.5 * this.gravity;
         } else {
             this.velocity.y = 0;
-        }
-
-
-        if (this instanceof Player && !this.isOnGround() && ((this.isOnLeftWall() && this.lastWallJump != this.blockAtHead().x)
-        || (this.isOnRightWall() && this.lastWallJump != this.blockAtHead().x)) && this.distanceToGround() > 1) {
-            if (this.velocity.y <= -3 && (this instanceof Player) && !down) {
-                this.velocity.y = -3;
-                this.sprite.playAnimation("wall");
-            }
         }
 
         if (this.velocity.y < -scl / 2)
@@ -147,7 +142,7 @@ function Entity(x, y) {
     }
 
     this.updateCamera = function() {
-        if (this.velocity.x > 0 && this.x > width / 3 * 2)
+        if (this.velocity.x > 0 && this.x - map.xStart > width / 3 * 2)
             map.moveStart(this.velocity.x, 0);
         else if (this.velocity.x < 0 && this.x - map.xStart < width / 3)
             map.moveStart(this.velocity.x, 0);
@@ -217,12 +212,15 @@ function Entity(x, y) {
     }
 
     this.isOnGround = function() {
-        if (map.buttomBorder == true && Math.floor(this.y) <= 0)
-            return true;
+        //console.log("Hitbox at (" + this.x + ";" + (Math.floor(this.y) - 1) + "): " + map.getTileAt(this.x, Math.floor(this.y) - 1).hitbox );
 
-        else if (map.collision(this.x, Math.floor(this.y) - 1)
-         || map.collision(this.x + this.width * scl - 1, Math.floor(this.y) - 1)
-         || map.collision(this.x + this.width / 2 * scl - 1, Math.floor(this.y) - 1))
+        if (map.buttomBorder == true && Math.floor(this.y) <= 0) {
+            return true;
+        }
+
+        else if (map.collision(this.x, Math.floor(this.y) - 1) === true
+         || map.collision(this.x + this.width * scl - 1, Math.floor(this.y) - 1) === true
+         || map.collision(this.x + this.width / 2 * scl - 1, Math.floor(this.y) - 1) === true)
             return true;
 
         return false;
@@ -283,6 +281,16 @@ function Entity(x, y) {
 
     this.blockAtHead = function(addedX = 0, addedY = 0) {
         return map.getBlockAt(this.x + addedX + this.width / 2 - 1, this.y + addedY + this.height - 1);
+    }
+
+    this.tileBelow = function() {
+        /*if (this.velocity.x > 0)
+            return map.getTileAt(this.x + this.width - 1, this.y - 1);
+        else if (this.velocity.x < 0)
+            return map.getTileAt(this.x, this.y - 1);
+        */
+
+        return map.getTileAt(this.x + this.width / 2, this.y - 1);
     }
 
     this.scale = function() {

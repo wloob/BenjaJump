@@ -7,10 +7,13 @@ var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
 var mapPath  = "maps/";
 var backgroundPath = "assets/backgrounds/";
 
+var tilesFile;
+var tilesFolder;
+
 var scl;
 var canvasWidth = 30;
 var canvasHeight = 15;
-var borderHeight = 30;
+var borderHeight = 0;
 
 var oldScl;
 
@@ -29,13 +32,14 @@ function preload() {
     addLoadedMap("test-map");
     addLoadedMap("test-map2");
     addLoadedMap("test-map3");
+    addLoadedMap("inside-maya-temple");
 
     addLoadedImage(backgroundPath + "hills.png");
+    addLoadedImage(backgroundPath + "cave.png");
+    addLoadedImage(backgroundPath + "outerspace.png");
+    addLoadedImage(backgroundPath + "mayan.png");
 
-    addLoadedImage("assets/texture/tiles/1.png");
-    addLoadedImage("assets/texture/tiles/2.png");
-    addLoadedImage("assets/texture/tiles/3.png");
-    addLoadedImage("assets/texture/tiles/18.png");
+    tilesFile = loadJSON("assets/tiles.json");
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
@@ -58,10 +62,11 @@ function preload() {
 
     addLoadedImage("assets/player/default/wall0.png");
 
+    addLoadedImage("assets/player/default/duck0.png");
+
     addLoadedImage("assets/icon/heart.png");
     addLoadedImage("assets/icon/slot.png");
     addLoadedImage("assets/icon/goldkey.png");
-
     addLoadedImage("assets/icon/tommygun.png");
 
     scaleCanvas();
@@ -76,6 +81,11 @@ function setup() {
     player = new Player();
 
     gui = new GUI();
+
+    tilesFolder = tilesFile.tilesFolder;
+    for (t = 0; t < tilesFile.tiles.length; t++) {
+        tiles.push(new Tile(tilesFile.tiles[t]));
+    }
 
     map = new Map();
     map.initiate("test-map3");
@@ -162,4 +172,13 @@ function scaleCanvas() {
 	}
     if (canvas != null)
         resizeCanvas(canvasWidth * scl, canvasHeight * scl);
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
