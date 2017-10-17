@@ -111,7 +111,7 @@ function loadFiles() { //LEVEL, TILES
 
     if (levelsFile == null)
         console.log("Failed to load levels file");
-    if (backgroundsFileFile == null)
+    if (backgroundsFile == null)
         console.log("Failed to load backgrounds file");
     if (tilesFile == null)
         console.log("Failed to load tiles file");
