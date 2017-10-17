@@ -5,10 +5,8 @@ function addLoadedImage(name) {
         return;
     }
 
-    if (useHost)
-        var img = loadImage(host + name);
-    else
-        var img = loadImage(name);
+    var img = loadImage((useHost ? host : "") + name);
+
     if (img !== null)
         loadedImages.push(new LoadedImage(name, img));
     else {

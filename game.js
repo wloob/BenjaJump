@@ -2,8 +2,8 @@ var canvas;
 
 var noUpdateTicks = 0;
 
-var useHost = false;
-var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
+var useHost = true;
+var host = "https://rawgit.com/Buggiam/BenjaJump/master/";
 
 var mapPath;
 
@@ -105,9 +105,9 @@ function tick() {
 }
 
 function loadFiles() { //LEVEL, TILES
-    levelsFile = loadJSON("assets/levels.json", loadLevel);
-    backgroundsFile = loadJSON("assets/backgrounds.json", loadBackgrounds);
-    tilesFile = loadJSON("assets/tiles.json", loadTiles);
+    levelsFile = loadJSON((useHost ? host : "") + "assets/levels.json", loadLevel);
+    backgroundsFile = loadJSON((useHost ? host : "") + "assets/backgrounds.json", loadBackgrounds);
+    tilesFile = loadJSON((useHost ? host : "") + "assets/tiles.json", loadTiles);
 }
 
 function loadLevel() {
