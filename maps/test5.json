@@ -2,7 +2,7 @@
 	"name":"test5",
 	"spawnX":15,
 	"spawnY":2,
-	"background":"hills.png",
+	"background":"cave.png",
 	"tiles":[
 		[ 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,0],
 		[ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -4,13 +4,18 @@ var noUpdateTicks = 0;
 
 var useHost = false;
 var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
-var mapPath  = "maps/";
-var backgroundPath = "assets/backgrounds/";
+
+var mapPath;
 
 var levelsFile;
 
+var barPath;
+
+var backgroundPath;
+var backgroundsFile;
+
+var tilesPath;
 var tilesFile;
-var tilesFolder;
 
 var scl;
 var canvasWidth = 30;
@@ -29,11 +34,10 @@ var down = false;
 
 var map;
 
+var level;
+
 function preload() {
-    addLoadedImage(backgroundPath + "hills.png");
-    addLoadedImage(backgroundPath + "cave.png");
-    addLoadedImage(backgroundPath + "outerspace.png");
-    addLoadedImage(backgroundPath + "mayan.png");
+    loadFiles();
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
@@ -63,11 +67,6 @@ function preload() {
     addLoadedImage("assets/icon/goldkey.png");
     addLoadedImage("assets/icon/tommygun.png");
 
-    player = new Player();
-    gui = new GUI();
-
-    loadFiles();
-
     scaleCanvas();
 }
 
@@ -76,6 +75,9 @@ function setup() {
     canvas.parent('sketch-holder');
 
     oldScl = scl;
+
+    player = new Player();
+    gui = new GUI();
 
     loadMap();
 }
@@ -104,10 +106,17 @@ function tick() {
 
 function loadFiles() { //LEVEL, TILES
     levelsFile = loadJSON("assets/levels.json", loadLevel);
+    backgroundsFile = loadJSON("assets/backgrounds.json", loadBackgrounds);
     tilesFile = loadJSON("assets/tiles.json", loadTiles);
 }
 
 function loadLevel() {
+    mapPath  = levelsFile.mapPath;
+    barPath = levelsFile.barPath;
+
+    level = levelsFile.levels[0];
+    addLoadedImage(barPath + level.bar);
+
     for (var i = 0; i < levelsFile.maps.length; i++) {
         var mapName = levelsFile.maps[i];
         addLoadedMap(mapName);
@@ -122,8 +131,17 @@ function loadMap() {
     player.y = map.spawnY * scl + 1;
 }
 
+function loadBackgrounds() {
+    backgroundPath = backgroundsFile.path;
+
+    for (var i = 0; i < backgroundsFile.backgrounds.length; i++) {
+        addLoadedImage(backgroundPath + backgroundsFile.backgrounds[i]);
+    }
+}
+
 function loadTiles() {
-    tilesFolder = tilesFile.tilesFolder;
+    tilesPath = tilesFile.tilesFolder;
+
     for (t = 0; t < tilesFile.tiles.length; t++) {
         tiles.push(new Tile(tilesFile.tiles[t]));
     }

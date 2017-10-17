@@ -11,6 +11,9 @@ function addLoadedImage(name) {
         var img = loadImage(name);
     if (img !== null)
         loadedImages.push(new LoadedImage(name, img));
+    else {
+        console.log("Failed to load image: " + name);
+    }
 }
 
 function getLoadedImage(name) {
