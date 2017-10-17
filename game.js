@@ -83,7 +83,9 @@ function loadFiles2() { //LEVEL, TILES
     useHost = (configFile.useHost == "true");
     host = useHost ? configFile.host : "";
 
-    console.log("Host='" + host + "'");
+    console.log("Using host?");
+	console.log(useHost);
+	console.log("Host='" + host + "'");
 
     levelsFile = loadJSON((useHost ? host : "") + "assets/levels.json", loadLevel);
     backgroundsFile = loadJSON((useHost ? host : "") + "assets/backgrounds.json", loadBackgrounds);
