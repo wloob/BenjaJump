@@ -5,7 +5,14 @@ function addLoadedImage(name) {
         return;
     }
 
-    var img = loadImage((useHost ? host : "") + name);
+    var img;
+    if (useHost) {
+        img = loadImage(host + name);
+        console.log("Loaded image " + name + " from host.");
+    } else {
+        img = loadImage(name);
+        console.log("Loaded image " + name + " locally.");
+    }
 
     if (img !== null)
         loadedImages.push(new LoadedImage(name, img));

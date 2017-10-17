@@ -40,34 +40,6 @@ var level;
 function preload() {
     loadFiles();
 
-    addLoadedImage("assets/player/default/stand0.png");
-    addLoadedImage("assets/player/default/stand1.png");
-
-    addLoadedImage("assets/player/default/idle0.png");
-    addLoadedImage("assets/player/default/idle1.png");
-
-    addLoadedImage("assets/player/default/run0.png");
-    addLoadedImage("assets/player/default/run1.png");
-    addLoadedImage("assets/player/default/run2.png");
-    addLoadedImage("assets/player/default/run3.png");
-    addLoadedImage("assets/player/default/run4.png");
-
-    addLoadedImage("assets/player/default/air0.png");
-
-    addLoadedImage("assets/player/default/jump0.png");
-    addLoadedImage("assets/player/default/jump1.png");
-    addLoadedImage("assets/player/default/jump2.png");
-    addLoadedImage("assets/player/default/jump3.png");
-
-    addLoadedImage("assets/player/default/wall0.png");
-
-    addLoadedImage("assets/player/default/duck0.png");
-
-    addLoadedImage("assets/icon/heart.png");
-    addLoadedImage("assets/icon/slot.png");
-    addLoadedImage("assets/icon/goldkey.png");
-    addLoadedImage("assets/icon/tommygun.png");
-
     scaleCanvas();
 }
 
@@ -110,18 +82,48 @@ function loadFiles() { //LEVEL, TILES
 function loadFiles2() { //LEVEL, TILES
     useHost = configFile.useHost;
     host = configFile.host;
-    console.log("Host=" + (useHost ? host : "null"));
 
-    levelsFile = loadJSON((useHost ? host : "") + "assets/levels.json", loadLevel);
-    backgroundsFile = loadJSON((useHost ? host : "") + "assets/backgrounds.json", loadBackgrounds);
-    tilesFile = loadJSON((useHost ? host : "") + "assets/tiles.json", loadTiles);
+    console.log(useHost);
 
-    if (levelsFile == null)
-        console.log("Failed to load levels file");
-    if (backgroundsFile == null)
-        console.log("Failed to load backgrounds file");
-    if (tilesFile == null)
-        console.log("Failed to load tiles file");
+    if (useHost) {
+        console.log("Host=" + host);
+        levelsFile = loadJSON(host + "assets/levels.json", loadLevel);
+        backgroundsFile = loadJSON(host + "assets/backgrounds.json", loadBackgrounds);
+        tilesFile = loadJSON(host + "assets/tiles.json", loadTiles);
+    } else {
+        console.log("Host=" + "none");
+        levelsFile = loadJSON("assets/levels.json", loadLevel);
+        backgroundsFile = loadJSON("assets/backgrounds.json", loadBackgrounds);
+        tilesFile = loadJSON("assets/tiles.json", loadTiles);
+    }
+
+    addLoadedImage("assets/player/default/stand0.png");
+    addLoadedImage("assets/player/default/stand1.png");
+
+    addLoadedImage("assets/player/default/idle0.png");
+    addLoadedImage("assets/player/default/idle1.png");
+
+    addLoadedImage("assets/player/default/run0.png");
+    addLoadedImage("assets/player/default/run1.png");
+    addLoadedImage("assets/player/default/run2.png");
+    addLoadedImage("assets/player/default/run3.png");
+    addLoadedImage("assets/player/default/run4.png");
+
+    addLoadedImage("assets/player/default/air0.png");
+
+    addLoadedImage("assets/player/default/jump0.png");
+    addLoadedImage("assets/player/default/jump1.png");
+    addLoadedImage("assets/player/default/jump2.png");
+    addLoadedImage("assets/player/default/jump3.png");
+
+    addLoadedImage("assets/player/default/wall0.png");
+
+    addLoadedImage("assets/player/default/duck0.png");
+
+    addLoadedImage("assets/icon/heart.png");
+    addLoadedImage("assets/icon/slot.png");
+    addLoadedImage("assets/icon/goldkey.png");
+    addLoadedImage("assets/icon/tommygun.png");
 }
 
 function loadLevel() {
