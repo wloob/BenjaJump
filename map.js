@@ -5,18 +5,15 @@ function addLoadedMap(name) {
         return;
     }
 
-    var file;
-    if (useHost)
-        file = loadJSON(mapPath + name + ".json");
-    else
-        file = loadJSON(host + mapPath + name + ".json");
-
+    var file = loadJSON((useHost ? host : "") + mapPath + name + ".json");
 
     if (file !== null) {
         loadedMaps.push(new LoadedMap(name, file));
         return true;
+    } else {
+        console.log("Failed to load map: " + name);
+        return false;
     }
-    return false;
 }
 
 function getLoadedMap(name) {

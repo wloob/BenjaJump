@@ -108,6 +108,13 @@ function loadFiles() { //LEVEL, TILES
     levelsFile = loadJSON((useHost ? host : "") + "assets/levels.json", loadLevel);
     backgroundsFile = loadJSON((useHost ? host : "") + "assets/backgrounds.json", loadBackgrounds);
     tilesFile = loadJSON((useHost ? host : "") + "assets/tiles.json", loadTiles);
+
+    if (levelsFile == null)
+        console.log("Failed to load levels file");
+    if (backgroundsFileFile == null)
+        console.log("Failed to load backgrounds file");
+    if (tilesFile == null)
+        console.log("Failed to load tiles file");
 }
 
 function loadLevel() {
