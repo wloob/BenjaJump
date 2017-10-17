@@ -5,14 +5,7 @@ function addLoadedMap(name) {
         return;
     }
 
-    var file;
-    if (useHost == true) {
-        file = loadJSON(host + mapPath + name + ".json");
-        console.log("Loaded map " + name + " from host.");
-    } else {
-        file = loadJSON(mapPath + name + ".json");
-        console.log("Loaded map " + name + " locally.");
-    }
+    var file = loadJSON(host + mapPath + name + ".json");
 
     if (file !== null) {
         loadedMaps.push(new LoadedMap(name, file));

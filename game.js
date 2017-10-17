@@ -80,22 +80,14 @@ function loadFiles() { //LEVEL, TILES
 }
 
 function loadFiles2() { //LEVEL, TILES
-    useHost = configFile.useHost;
-    host = configFile.host;
+    useHost = (configFile.useHost == "true");
+    host = useHost ? configFile.host : "";
 
-    console.log(useHost);
+    console.log("Host='" + host + "'");
 
-    if (useHost) {
-        console.log("Host=" + host);
-        levelsFile = loadJSON(host + "assets/levels.json", loadLevel);
-        backgroundsFile = loadJSON(host + "assets/backgrounds.json", loadBackgrounds);
-        tilesFile = loadJSON(host + "assets/tiles.json", loadTiles);
-    } else {
-        console.log("Host=" + "none");
-        levelsFile = loadJSON("assets/levels.json", loadLevel);
-        backgroundsFile = loadJSON("assets/backgrounds.json", loadBackgrounds);
-        tilesFile = loadJSON("assets/tiles.json", loadTiles);
-    }
+    levelsFile = loadJSON((useHost ? host : "") + "assets/levels.json", loadLevel);
+    backgroundsFile = loadJSON((useHost ? host : "") + "assets/backgrounds.json", loadBackgrounds);
+    tilesFile = loadJSON((useHost ? host : "") + "assets/tiles.json", loadTiles);
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
