@@ -2,8 +2,9 @@ var canvas;
 
 var noUpdateTicks = 0;
 
-var useHost = true;
-var host = "https://rawgit.com/Buggiam/BenjaJump/master/";
+var configFile;
+var useHost;
+var host;
 
 var mapPath;
 
@@ -88,8 +89,6 @@ function draw() {
     } else
         tick();
 
-    background(41, 234, 244);
-
     map.draw();
 
     gui.show();
@@ -105,6 +104,14 @@ function tick() {
 }
 
 function loadFiles() { //LEVEL, TILES
+    configFile = loadJSON("config.json", loadFiles2);
+}
+
+function loadFiles2() { //LEVEL, TILES
+    useHost = configFile.useHost;
+    host = configFile.host;
+    console.log("Host=" + (useHost ? host : "null"));
+
     levelsFile = loadJSON((useHost ? host : "") + "assets/levels.json", loadLevel);
     backgroundsFile = loadJSON((useHost ? host : "") + "assets/backgrounds.json", loadBackgrounds);
     tilesFile = loadJSON((useHost ? host : "") + "assets/tiles.json", loadTiles);
