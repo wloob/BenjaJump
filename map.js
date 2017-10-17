@@ -6,6 +6,7 @@ function addLoadedMap(name) {
     }
 
     var file = loadJSON(mapPath + name + ".json");
+
     if (file !== null) {
         loadedMaps.push(new LoadedMap(name, file));
         return true;
@@ -189,6 +190,7 @@ function Map() {
     this.initiate = function(mapName) {
         this.file = getLoadedMap(mapName);
         this.tileColumns = this.file.tiles;
+
         while (this.tileColumns.length < canvasWidth) {
             var empty = new Array(15);
             empty.fill(0);

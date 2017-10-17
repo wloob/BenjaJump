@@ -7,6 +7,8 @@ var host = "https://raw.githubusercontent.com/Buggiam/BenjaJump/master/";
 var mapPath  = "maps/";
 var backgroundPath = "assets/backgrounds/";
 
+var levelsFile;
+
 var tilesFile;
 var tilesFolder;
 
@@ -28,18 +30,10 @@ var down = false;
 var map;
 
 function preload() {
-    addLoadedMap("test5");
-    addLoadedMap("test-map");
-    addLoadedMap("test-map2");
-    addLoadedMap("test-map3");
-    addLoadedMap("inside-maya-temple");
-
     addLoadedImage(backgroundPath + "hills.png");
     addLoadedImage(backgroundPath + "cave.png");
     addLoadedImage(backgroundPath + "outerspace.png");
     addLoadedImage(backgroundPath + "mayan.png");
-
-    tilesFile = loadJSON("assets/tiles.json");
 
     addLoadedImage("assets/player/default/stand0.png");
     addLoadedImage("assets/player/default/stand1.png");
@@ -69,6 +63,11 @@ function preload() {
     addLoadedImage("assets/icon/goldkey.png");
     addLoadedImage("assets/icon/tommygun.png");
 
+    player = new Player();
+    gui = new GUI();
+
+    loadFiles();
+
     scaleCanvas();
 }
 
@@ -78,20 +77,7 @@ function setup() {
 
     oldScl = scl;
 
-    player = new Player();
-
-    gui = new GUI();
-
-    tilesFolder = tilesFile.tilesFolder;
-    for (t = 0; t < tilesFile.tiles.length; t++) {
-        tiles.push(new Tile(tilesFile.tiles[t]));
-    }
-
-    map = new Map();
-    map.initiate("test-map3");
-
-    player.x = map.spawnX * scl;
-    player.y = map.spawnY * scl + 1;
+    loadMap();
 }
 
 function draw() {
@@ -107,8 +93,6 @@ function draw() {
     gui.show();
 
     player.show();
-
-
 }
 
 function tick() {
@@ -116,6 +100,33 @@ function tick() {
 
     player.tick();
     player.playerTick();
+}
+
+function loadFiles() { //LEVEL, TILES
+    levelsFile = loadJSON("assets/levels.json", loadLevel);
+    tilesFile = loadJSON("assets/tiles.json", loadTiles);
+}
+
+function loadLevel() {
+    for (var i = 0; i < levelsFile.maps.length; i++) {
+        var mapName = levelsFile.maps[i];
+        addLoadedMap(mapName);
+    }
+}
+
+function loadMap() {
+    map = new Map();
+    map.initiate("test-map3");
+
+    player.x = map.spawnX * scl;
+    player.y = map.spawnY * scl + 1;
+}
+
+function loadTiles() {
+    tilesFolder = tilesFile.tilesFolder;
+    for (t = 0; t < tilesFile.tiles.length; t++) {
+        tiles.push(new Tile(tilesFile.tiles[t]));
+    }
 }
 
 function move() {
