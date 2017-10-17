@@ -1,0 +1,10 @@
+{	
+	"path": "assets/backgrounds/",
+	
+	"backgrounds": [
+		"hills.png",
+		"cave.png",
+		"outerspace.png",
+		"mayan.png"
+	]
+}

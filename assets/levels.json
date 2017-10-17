@@ -1,0 +1,42 @@
+{
+	"mapPath": "maps/",
+	"barPath": "assets/level/bars/",
+	
+	"maps": [
+		"test5",
+		"test-map",
+		"test-map2",
+		"test-map3",
+		"inside-maya-temple"
+	],
+	
+	"levels": [
+		{
+			"name": "Test Level",
+			"spawn-map": "test-map3",
+			"bar": "test-map-bar.png",
+			"maps": [
+				{
+					"name": "test-map3",
+					"start": 0
+				},
+				{
+					"name": "test-map2",
+					"start": 17
+				},
+				{
+					"name": "test5",
+					"start": 30
+				},
+				{
+					"name": "test-map",
+					"start": 61
+				},
+				{
+					"name": "inside-maya-temple",
+					"start": 8
+				}
+			]
+		}
+	]
+}

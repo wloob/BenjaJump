@@ -1,0 +1,129 @@
+{
+	"tilesFolder": "assets/texture/tiles/",
+	"tiles": [
+		{
+			"name": "air",
+			"id": 0,
+			"hitbox": "false",
+			"friction": 0,
+			"damage": "false"			
+		},
+		{
+			"name": "stone",
+			"id": 1
+		},
+		{
+			"name": "grass",
+			"id": 2
+		},
+		{
+			"name": "dirt",
+			"id": 3
+		},
+		{
+			"name": "plank_horizontal",
+			"id": 4
+		},
+		{
+			"name": "plank_vertical",
+			"id": 5
+		},
+		{
+			"name": "stone_brick",
+			"id": 6
+		},
+		{
+			"name": "stone_brick_split",
+			"id": 7
+		},
+		{
+			"name": "stone_brick_split2",
+			"id": 8
+		},
+		{
+			"name": "sandstone_brick",
+			"id": 9
+		},
+		{
+			"name": "sandstone_brick_split",
+			"id": 10
+		},
+		{
+			"name": "sandstone_brick_split2",
+			"id": 11
+		},
+		{
+			"name": "flower_blue",
+			"id": 17,
+			"hitbox": "false"
+		},
+		{
+			"name": "flower_red",
+			"id": 18,
+			"hitbox": "false"
+		},
+		{
+			"name": "scaffold",
+			"id": 19
+		},
+		{
+			"name": "void",
+			"id": 20,
+			"hitbox": "false"
+		},
+		{
+			"name": "spike_up",
+			"id": 21,
+			"hitbox": "false",
+			"damage": "true"
+		},
+		{
+			"name": "spike_left",
+			"id": 22,
+			"hitbox": "false",
+			"damage": "true"
+		},
+		{
+			"name": "spike_down",
+			"id": 23,
+			"hitbox": "false",
+			"damage": "true"
+		},
+		{
+			"name": "spike_right",
+			"id": 24,
+			"hitbox": "false",
+			"damage": "true"
+		},
+		{
+			"name": "stone_ice",
+			"id": 25,
+			"friction": 0.05
+		},
+		{
+			"name": "dirt_ice",
+			"id": 26,
+			"friction": 0.05
+		},
+		{
+			"name": "stone_brick_ice",
+			"id": 27,
+			"friction": 0.05
+		},
+		{
+			"name": "sandstone_brick_ice",
+			"id": 28,
+			"friction": 0.05
+		},
+		{
+			"name": "plank_ice",
+			"id": 29,
+			"friction": 0.05
+		},
+		{
+			"name": "plank_key",
+			"id": 30
+		
+		}
+	]
+}
