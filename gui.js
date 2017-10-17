@@ -19,7 +19,7 @@ function GUI() {
         image(getLoadedImage(barPath + level.bar), scl / 4, height - scl + scl / 3, scl * 4, scl * 0.5);
 
         fill(255);
-        rect(scl / 4 + (player.x / map.width() * scl * 4) - (scl / 10 / 2), height - scl + scl / 3, scl / 10, scl * 0.5);
+        rect(scl / 4 + (player.x / (level.length * scl) * scl * 4) - (scl / 10 / 2), height - scl + scl / 3, scl / 10, scl * 0.5);
     }
 
     this.scale = function() {

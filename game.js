@@ -127,13 +127,27 @@ function loadLevel() {
     level = levelsFile.levels[0];
     addLoadedImage(barPath + level.bar);
 
-    for (var i = 0; i < levelsFile.maps.length; i++) {
-        var mapName = levelsFile.maps[i];
+    for (var i = 0; i < level.maps.length; i++) {
+        var mapName = level.maps[i].name;
         addLoadedMap(mapName);
     }
 }
 
 function loadMap() {
+    level.length = 0;
+    for (var i = 0; i < level.maps.length; i++) {
+        var mapTemp = level.maps[i];
+
+        var levelEnd = getLoadedMap(mapTemp.name).tiles.length + level.maps[i].start;
+        if (levelEnd > level.length) {
+            level.length = levelEnd;
+        }
+    }
+
+    console.log("Level length = " + level.length);
+
+
+
     map = new Map();
     map.initiate("test-map3");
 
