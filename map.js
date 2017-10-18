@@ -69,6 +69,8 @@ function Map() {
     this.xStart = 0;
     this.yStart = 0;
 
+    this.start = 0;
+
     this.setTile = function(x, y, id) {
         this.tileColumns[x][y] = id;
     }
@@ -227,6 +229,8 @@ function Map() {
             this.rightBorder = this.file.rightBorder;
 
         this.links = this.file.links;
+
+        this.start = this.file.start;
 
         this.xStart = player.x - (canvasWidth * scl / 2);
 

@@ -138,7 +138,11 @@ function loadMap() {
     for (var i = 0; i < level.maps.length; i++) {
         var mapTemp = level.maps[i];
 
-        var levelEnd = getLoadedMap(mapTemp.name).tiles.length + level.maps[i].start;
+        getLoadedMap(mapTemp.name).start = mapTemp.start;
+
+        console.log("map start for " + mapTemp.name + "=" + getLoadedMap(mapTemp.name).start);
+
+        var levelEnd = getLoadedMap(mapTemp.name).tiles.length + getLoadedMap(mapTemp.name).start;
         if (levelEnd > level.length) {
             level.length = levelEnd;
         }

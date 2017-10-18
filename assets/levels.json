@@ -22,7 +22,7 @@
 				},
 				{
 					"name": "test-map2",
-					"start": 17
+					"start": 19
 				},
 				{
 					"name": "test5",
@@ -30,11 +30,11 @@
 				},
 				{
 					"name": "test-map",
-					"start": 61
+					"start": 60
 				},
 				{
 					"name": "inside-maya-temple",
-					"start": 8
+					"start": 4
 				}
 			]
 		}
